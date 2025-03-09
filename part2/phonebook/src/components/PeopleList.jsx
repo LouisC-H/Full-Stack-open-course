@@ -1,0 +1,16 @@
+const PeopleList = (props) => {
+  var filteredPeople = props.people.reduce((filteredList, person) => {
+        if (person.name.toLowerCase().includes(props.nameFilter)){
+          filteredList.push(person)
+        }
+        return filteredList
+      }, []
+    )
+    return (
+    filteredPeople.map(person => 
+      <p key={person.name}>{person.name} {person.number}</p>
+    )
+  )
+}
+
+export default PeopleList

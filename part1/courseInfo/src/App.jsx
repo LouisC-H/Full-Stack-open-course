@@ -1,16 +1,16 @@
 import Course from "./components/Course"
 
-const Courses = (props) => {
+const Courses = ({parts}) => {
   return(
-    props.parts.map(part => 
+    parts.map(part => 
       <Course key={part.id} course={part}></Course>
     )
   )
 }
 
-const Title = (props) => {
+const Title = ({titleText}) => {
   return (
-    <h1>{props.titleText}</h1>
+    <h1>{titleText}</h1>
   )
 }
 
@@ -34,6 +34,11 @@ const App = () => {
           name: 'State of a component',
           exercises: 14,
           id: 3
+        },
+        {
+          name: 'Redux',
+          exercises: 11,
+          id: 4
         }
       ]
     }, 
