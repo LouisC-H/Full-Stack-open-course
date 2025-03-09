@@ -28,50 +28,68 @@ const App = () => {
   // Adding a new person to the phonebook
   const addPerson = (event) => {
     event.preventDefault()
+
+    const personObject = {
+      name: newName.trim(),
+      number: newNumber
+    }
+
+    // If the person isn't already in the phonebook, add them
     if (!checkNameDupe(newName.trim())) {
-      const personObject = {
-        name: newName.trim(),
-        number: newNumber
-      }
-      
       personsAPI
         .create(personObject)
         .then(returnedPerson => {
             setPeople(people.concat(returnedPerson))
           }
         )
-      setNewName('')
-      setNewNumber('')
+    } 
+    // Else if they are already in the phonebook, check before overwriting them
+    else {
+      if (window.confirm(`${personObject.name} is already added to the phonebook, replace the old number with a new one?`)) {
+        const id = people.find(person => person.name === personObject.name).id
+        console.log(id);
+        
+        personsAPI
+          .update(id, personObject)
+          .then(returnedPerson => {
+            setPeople(people.map(person => person.id === id ? returnedPerson : person))
+          })
+          .catch(error => {
+            alert(
+              `Oops, the person '${personObject.name}' never properly existed in the server. Please submit them again.`
+            )
+            setPeople(people.filter(n => n.id !== id))
+          })
+      }
     }
+    setNewName('')
+    setNewNumber('')
+  }
+
+  // Checks whether two names are identical, and if so returns true and sends an alert
+  const checkNameDupe = (checkName) => {        
+    if (people.some(person => person.name === checkName)) {
+      return true
+    }
+    return false
   }
 
   // Deleting an existing user.
     const deletePerson = (id, name) => {
       
       if (window.confirm(`Delete ${name} ?`)) {
-        setPeople(people.filter(n => n.id !== id))
         personsAPI
           .remove(id)
           .catch(error => {
             alert(
               `the person '${name}' was already deleted from server`
             )
-            setPeople(people.filter(n => n.id !== id))
           }
         )
+        setPeople(people.filter(n => n.id !== id))
       }
     }
-
-  // Checks whether two names are identical, and if so returns true and sends an alert
-  const checkNameDupe = (checkName) => {        
-    if (people.some(person => person.name === checkName)) {
-      alert(`${checkName} is already added to phonebook`)
-      return true
-    }
-    return false
-  }
-
-
+    
   return (
     <div>
       <h2>Phonebook</h2>

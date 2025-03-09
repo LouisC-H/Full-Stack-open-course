@@ -1,14 +1,21 @@
 import axios from 'axios'
 const baseUrl = 'http://localhost:3001/persons'
 
+// Useful for debugging edge cases of desyncronisation between browser and server:
+
+// const getAll = () => {
+//   const request = axios.get(baseUrl)
+//   const nonExisting = {
+//     id: 10000,
+//     name: 'This person is not saved to server',
+//     number: 9999999,
+//   }
+//   return request.then(response => response.data.concat(nonExisting))
+// }
+
 const getAll = () => {
   const request = axios.get(baseUrl)
-  const nonExisting = {
-    id: 10000,
-    name: 'This person is not saved to server',
-    number: 9999999,
-  }
-  return request.then(response => response.data.concat(nonExisting))
+  return request.then(response => response.data)
 }
 
 const create = newObject => {
