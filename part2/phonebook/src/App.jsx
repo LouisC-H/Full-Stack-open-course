@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import PeopleList from './components/PeopleList'
 import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
@@ -22,7 +21,8 @@ const App = () => {
     .getAll()
     .then( initialPeople => {
         setPeople(initialPeople)
-      })
+      }
+    )
   }, [])
 
   // Adding a new person to the phonebook
@@ -44,6 +44,23 @@ const App = () => {
       setNewNumber('')
     }
   }
+
+  // Deleting an existing user.
+    const deletePerson = (id, name) => {
+      
+      if (window.confirm(`Delete ${name} ?`)) {
+        setPeople(people.filter(n => n.id !== id))
+        personsAPI
+          .remove(id)
+          .catch(error => {
+            alert(
+              `the person '${name}' was already deleted from server`
+            )
+            setPeople(people.filter(n => n.id !== id))
+          }
+        )
+      }
+    }
 
   // Checks whether two names are identical, and if so returns true and sends an alert
   const checkNameDupe = (checkName) => {        
@@ -68,7 +85,11 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <PeopleList people={people} nameFilter={nameFilter.toLowerCase()} />
+      <PeopleList 
+        people={people} 
+        nameFilter={nameFilter.toLowerCase()}
+        deleteFunc={deletePerson}
+      />
     </div>
   )
 }

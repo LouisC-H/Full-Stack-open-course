@@ -1,7 +1,7 @@
 const Filter = ({value, filterStateHandler}) => {
   return(
     <div>          
-    name: <input 
+    filter shown with: <input 
     value={value}
     onChange={filterStateHandler}
     />
