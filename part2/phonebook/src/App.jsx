@@ -3,6 +3,7 @@ import axios from 'axios'
 import PeopleList from './components/PeopleList'
 import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
+import personsAPI from '../services/personsAPI'
 
 const App = () => {
   const [people, setPeople] = useState([])
@@ -10,28 +11,21 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
 
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPeople(response.data)
+  // Links typing in the text boxes to changing the state variables
+  const handleNameChange = (event) => {setNewName(event.target.value)}
+  const handleNumberChange = (event) => {setNewNumber(event.target.value)}
+  const handleFilterChange = (event) => {setNameFilter(event.target.value)}
+
+  // Runs on first render to import the 
+  useEffect( () => {
+    personsAPI
+    .getAll()
+    .then( initialPeople => {
+        setPeople(initialPeople)
       })
-  }
+  }, [])
 
-  useEffect(hook, [])
-
-  const handleNameChange = (event) => {    
-    setNewName(event.target.value)
-  }
-  const handleNumberChange = (event) => {    
-    setNewNumber(event.target.value)
-  }
-  const handleFilterChange = (event) => { 
-    setNameFilter(event.target.value)
-  }
-
+  // Adding a new person to the phonebook
   const addPerson = (event) => {
     event.preventDefault()
     if (!checkNameDupe(newName.trim())) {
@@ -39,12 +33,19 @@ const App = () => {
         name: newName.trim(),
         number: newNumber
       }
-      setPeople(people.concat(personObject))
+      
+      personsAPI
+        .create(personObject)
+        .then(returnedPerson => {
+            setPeople(people.concat(returnedPerson))
+          }
+        )
+      setNewName('')
+      setNewNumber('')
     }
-    setNewName('')
-    setNewNumber('')
   }
 
+  // Checks whether two names are identical, and if so returns true and sends an alert
   const checkNameDupe = (checkName) => {        
     if (people.some(person => person.name === checkName)) {
       alert(`${checkName} is already added to phonebook`)
