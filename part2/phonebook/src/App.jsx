@@ -3,12 +3,15 @@ import PeopleList from './components/PeopleList'
 import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
 import personsAPI from '../services/personsAPI'
+import Notification from './components/Notification'
 
 const App = () => {
   const [people, setPeople] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [notifMessage, setNotifMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   // Links typing in the text boxes to changing the state variables
   const handleNameChange = (event) => {setNewName(event.target.value)}
@@ -25,39 +28,48 @@ const App = () => {
     )
   }, [])
 
+  const sendNotification = (message, isError) => {
+    setNotifMessage(message)
+    setIsError(isError)
+    setTimeout(() => {
+      setNotifMessage(null)
+    }, 5000)
+  }
+
   // Adding a new person to the phonebook
   const addPerson = (event) => {
     event.preventDefault()
 
+    const trimmedName = newName.trim()
+
     const personObject = {
-      name: newName.trim(),
+      name: trimmedName,
       number: newNumber
     }
 
     // If the person isn't already in the phonebook, add them
-    if (!checkNameDupe(newName.trim())) {
+    if (!checkNameDupe(trimmedName)) {
       personsAPI
         .create(personObject)
         .then(returnedPerson => {
             setPeople(people.concat(returnedPerson))
           }
         )
+        .then(sendNotification(`Added ${trimmedName}.`, false))
     } 
     // Else if they are already in the phonebook, check before overwriting them
     else {
-      if (window.confirm(`${personObject.name} is already added to the phonebook, replace the old number with a new one?`)) {
-        const id = people.find(person => person.name === personObject.name).id
-        console.log(id);
+      if (window.confirm(`${trimmedName} is already added to the phonebook, replace the old number with a new one?`)) {
+        const id = people.find(person => person.name === trimmedName).id
         
         personsAPI
           .update(id, personObject)
           .then(returnedPerson => {
             setPeople(people.map(person => person.id === id ? returnedPerson : person))
+            sendNotification(`Changed ${trimmedName}'s number to ${personObject.number}.`, false)
           })
           .catch(error => {
-            alert(
-              `Oops, the person '${personObject.name}' never properly existed in the server. Please submit them again.`
-            )
+            sendNotification(`Information of '${trimmedName}' has already been removed from the server, please submit their information afresh.`, true)
             setPeople(people.filter(n => n.id !== id))
           })
       }
@@ -80,10 +92,9 @@ const App = () => {
       if (window.confirm(`Delete ${name} ?`)) {
         personsAPI
           .remove(id)
+          .then(sendNotification(`Deleted ${name}.`, false))
           .catch(error => {
-            alert(
-              `the person '${name}' was already deleted from server`
-            )
+            sendNotification(`Information of '${name}' has already been removed from the server.`, true)
           }
         )
         setPeople(people.filter(n => n.id !== id))
@@ -93,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notifMessage} isError={isError} />
       <Filter value={nameFilter} filterStateHandler={handleFilterChange} />
 
       <h2>Add new entry</h2>
