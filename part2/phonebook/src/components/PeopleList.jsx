@@ -1,5 +1,3 @@
-import personsAPI from "../../services/personsAPI"
-
 const PeopleList = (props) => {
   var filteredPeople = props.people.reduce((filteredList, person) => {
         if (person.name.toLowerCase().includes(props.nameFilter)){

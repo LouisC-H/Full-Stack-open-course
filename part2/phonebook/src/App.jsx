@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import PeopleList from './components/PeopleList'
 import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
-import personsAPI from '../services/personsAPI'
+import personsAPI from './services/personsDb'
 import Notification from './components/Notification'
 
 const App = () => {
@@ -22,7 +22,8 @@ const App = () => {
   useEffect( () => {
     personsAPI
     .getAll()
-    .then( initialPeople => {
+    .then( 
+      initialPeople => {
         setPeople(initialPeople)
       }
     )
