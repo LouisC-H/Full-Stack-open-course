@@ -13,12 +13,12 @@ const App = () => {
   const handleCountryFound = (countryName) => {
     setNameFilter(countryName)
     countriesAPI
-          .find(countryName)
-          .then(
-            countryData => {
-              setCountryDetails(countryData)
-            }
-          )
+      .find(countryName)
+      .then(
+        countryData => {
+          setCountryDetails(countryData)
+        }
+      )
   }
   const handleCountryNotFound = () => {setCountryDetails(null)}
   
@@ -55,11 +55,9 @@ const App = () => {
           nameFilter={nameFilter}
           countryFoundHandler={handleCountryFound}
           countryNotFoundHandler={handleCountryNotFound}
-          countryDetails={countryDetails}
+          hasFoundCountry={Boolean(countryDetails)}
         />
-        <CountryDetails
-          countryDetails={countryDetails}
-        />
+        <CountryDetails countryDetails={countryDetails} />
       </div>
     </>
   )

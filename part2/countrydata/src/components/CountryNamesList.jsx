@@ -1,34 +1,39 @@
-const CountriesList = ({countries, nameFilter, countryFoundHandler, countryNotFoundHandler, countryDetails}) => {  
+const CountriesList = ({countries, nameFilter, countryFoundHandler, countryNotFoundHandler, hasFoundCountry}) => {  
+  
   // Remove countries whose names don't correspond to the filter
   var filteredCountries = countries.reduce((filteredList, countryName) => {
-        if (countryName.toLowerCase().includes(nameFilter.toLowerCase())){
-          filteredList.push(countryName)
-        }
-        return filteredList
-      }, []
-    )
+      if (countryName.toLowerCase().includes(nameFilter.toLowerCase())){
+        filteredList.push(countryName)
+      }      
+      return filteredList
+    }, []
+  )
 
   var exactMatch = countries.reduce((matchingName, countryName) => {
     if (countryName.toLowerCase() === nameFilter.toLowerCase()){
-      console.log(nameFilter);
       return countryName
     }
     return matchingName
   }, null
-  )
+  )  
   
-  console.log('exactMatch: ', exactMatch);
-  
-  
-  // Check whether a single county has now been identified
-  if (filteredCountries.length === 1 && !countryDetails || exactMatch && !countryDetails) {
-    countryFoundHandler(exactMatch)
-  } else if (filteredCountries.length != 1 && countryDetails && !exactMatch) {
-    countryNotFoundHandler()
+  // If we haven't yet found a single country to display
+  if (!hasFoundCountry) {
+    // If we've narrowed it down to one country or we exactly match a country's name, set it as found
+    if (exactMatch) {
+      countryFoundHandler(exactMatch)
+    } else if (filteredCountries.length === 1) {
+      countryFoundHandler(filteredCountries[0])
+    }
+  } else {
+    // If we've already narrowed it down to a single country, monitor to find when that is no longer the case
+    if (filteredCountries.length != 1 && !exactMatch) {
+      countryNotFoundHandler()
+    }
   }
 
   // Check what to render depending on the number of countries found
-  if (filteredCountries.length <= 1) {
+  if (filteredCountries.length <= 1 || hasFoundCountry) {
     return null
   } else if (filteredCountries.length >= 10) {
     return(
@@ -36,9 +41,7 @@ const CountriesList = ({countries, nameFilter, countryFoundHandler, countryNotFo
         Too many matches, please make your query more specific
       </p> 
     )
-  } else {
-    console.log(filteredCountries);
-    
+  } else {    
     return (
       filteredCountries.map(countryName => 
         <p key={countryName}>

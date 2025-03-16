@@ -1,4 +1,5 @@
 import LanguagesList from "./LanguagesList"
+import WeatherDisplay from "./WeatherDisplay"
 
 const CountryDetails= ({countryDetails}) => {  
   
@@ -6,6 +7,8 @@ const CountryDetails= ({countryDetails}) => {
   if (!countryDetails){
     return null
   }
+
+
 
   return(
     <div>
@@ -15,6 +18,7 @@ const CountryDetails= ({countryDetails}) => {
       <h2>Languages</h2>
       <LanguagesList languages={countryDetails.languages} />
       <img src={countryDetails.flags.svg} alt={countryDetails.flags.alt} width='256'></img>
+      <WeatherDisplay countryDetails={countryDetails} />
     </div>
   )
 
