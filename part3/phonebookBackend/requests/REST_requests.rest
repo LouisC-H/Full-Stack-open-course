@@ -1,0 +1,22 @@
+### Home page
+GET http://localhost:3001/info
+
+### Get all
+GET http://localhost:3001/api/persons/
+
+### Find a real ID
+GET http://localhost:3001/api/persons/3
+### Find a non-existent ID
+GET http://localhost:3001/api/persons/5
+
+### Delete
+DELETE  http://localhost:3001/api/persons/842248
+
+### Post
+POST http://localhost:3001/api/persons/
+content-type: application/json
+
+{ 
+    "name": "Steve McBevee", 
+    "number": "123456789"
+}
