@@ -1,7 +1,6 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
-
-app.use(express.json())
 
 let phoneBook = [
   { 
@@ -25,6 +24,25 @@ let phoneBook = [
     "number": "39-23-6423122"
   }
 ]
+
+app.use(express.json())
+
+morgan.token('personPOST', function (req, res) {
+  const body = req.body
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  return JSON.stringify(person);
+});
+app.use(morgan('tiny', {
+  skip: function (req, res) { return req.method === "POST" }
+}))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :personPOST', {
+    skip: function (req, res) { return req.method !== "POST" }
+}))
 
 // Home page
 const homePageString = (dateString, phoneBook) => {
