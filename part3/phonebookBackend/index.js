@@ -28,7 +28,6 @@ let phoneBook = [
 ]
 
 app.use(express.json())
-app.use(cors())
 
 morgan.token('personPOST', function (req, res) {
   const body = req.body

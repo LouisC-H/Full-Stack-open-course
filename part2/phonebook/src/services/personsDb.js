@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://full-stack-open-course-phonebook.onrender.com/api/persons'
+const baseUrl = '/api/persons'
 
 // Useful for debugging edge cases of desyncronisation between browser and server:
 //

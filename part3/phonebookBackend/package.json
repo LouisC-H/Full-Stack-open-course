@@ -6,12 +6,13 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rd /s /q dist && cd ../../part2/phonebook && npm run build && Xcopy /S /I /E dist ..\\..\\part3\\phonebookBackend\\dist",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Louis Clement-Harris",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
     "express": "^4.21.2",
     "morgan": "^1.10.0"
   }
