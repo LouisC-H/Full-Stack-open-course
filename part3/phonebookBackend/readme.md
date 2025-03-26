@@ -1,1 +1,1 @@
-Link to programme running in Render: https://full-stack-open-course-phonebook.onrender.com
+Link to programme running in Render, works up to 3.11: https://full-stack-open-course-phonebook.onrender.com
