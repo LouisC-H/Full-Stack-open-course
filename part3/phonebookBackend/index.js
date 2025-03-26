@@ -27,6 +27,7 @@ let phoneBook = [
 ]
 
 app.use(express.json())
+app.use(express.static('dist'))
 
 morgan.token('personPOST', function (req, res) {
   const body = req.body
