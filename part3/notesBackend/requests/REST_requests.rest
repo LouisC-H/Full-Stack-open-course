@@ -1,15 +1,18 @@
 GET http://localhost:3001/api/notes/
 
 ###
-DELETE http://localhost:3001/api/notes/3
+GET http://localhost:3001/api/notes/67e6af3167057c4e06f396d0
+
+###
+DELETE http://localhost:3001/api/notes/67ebf720e234ee5f457e8484
 
 ###
 POST http://localhost:3001/api/notes 
 Content-Type: application/json
 
 {
-    "content": "VS code rest client is pretty handy tool", "important": true
-
+    "content": "VS code rest client is pretty handy tool",
+    "important": false
 }
 
 
