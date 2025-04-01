@@ -55,10 +55,6 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 // Post- NOT YET RE-IMPLEMENTED TO USE MONGODB
-const generateId = () => {
-  return String(Math.round(Math.random()*1000000))
-}
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -68,21 +64,20 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  if (phoneBook.find(person => person.name === body.name)){
-    return response.status(400).json({ 
-      error: 'name must be unique' 
-    })
-  }
+  // if (phoneBook.find(person => person.name === body.name)){
+  //   return response.status(400).json({ 
+  //     error: 'name must be unique' 
+  //   })
+  // }
 
-  const person = {
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: generateId(),
-  }
+  })
 
-  phoneBook = phoneBook.concat(person)
-
-  response.json(person)
+  person.save().then(savedPerson =>
+    response.json(savedPerson)
+  )
 })
 
 // Delete- NOT YET RE-IMPLEMENTED TO USE MONGODB
