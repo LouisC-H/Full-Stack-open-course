@@ -1,31 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
+const Person = require('./models/person')
 
 const app = express()
 
-let phoneBook = [
-  { 
-    "id": "1",
-    "name": "Arto Hellas", 
-    "number": "040-123456"
-  },
-  { 
-    "id": "2",
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523"
-  },
-  { 
-    "id": "3",
-    "name": "Dan Abramov", 
-    "number": "12-43-234345"
-  },
-  { 
-    "id": "4",
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
-  }
-]
-
+// Middleware
 app.use(express.json())
 app.use(express.static('dist'))
 
@@ -46,35 +26,35 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
     skip: function (req, res) { return req.method !== "POST" }
 }))
 
-// Home page
-const homePageString = (dateString, phoneBook) => {
-  numPeople = Object.keys(phoneBook).length
+// Home page - NOT YET RE-IMPLEMENTED TO USE MONGODB
+const homePageString = (dateString, people) => {
+  numPeople = Object.keys(people).length
   return `Phonebook has info for ${numPeople} people`+ "\n\n" + `${dateString}`
 }
 
 app.get('/info', (request, response) => {
-  var today = new Date();
-  response.send(homePageString(today.toString().trim(), phoneBook))
+  Person.find({}).then(people => {
+    console.log('people : ', people);
+    var today = new Date();
+    response.send(homePageString(today.toString().trim(), people))
+  })
 })
 
 // Get all
 app.get('/api/persons', (request, response) => {
-  response.json(phoneBook)
+  Person.find({}).then(people => {
+    response.json(people)
+  })
 })
 
 // Find
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id
-  const person = phoneBook.find(person => person.id === id)
-  
-  if (person) {
+  Person.findById(request.params.id).then(person => {
     response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  })
 })
 
-// Post
+// Post- NOT YET RE-IMPLEMENTED TO USE MONGODB
 const generateId = () => {
   return String(Math.round(Math.random()*1000000))
 }
@@ -105,12 +85,19 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-// Delete
+// Delete- NOT YET RE-IMPLEMENTED TO USE MONGODB
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
   phoneBook = phoneBook.filter(person => person.id !== id)
   response.status(204).end()
 })
+
+// Unknown Endpoint
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {

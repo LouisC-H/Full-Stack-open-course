@@ -5,7 +5,7 @@ GET http://localhost:3001/info
 GET http://localhost:3001/api/persons/
 
 ### Find a real ID
-GET http://localhost:3001/api/persons/3
+GET http://localhost:3001/api/persons/67e6b5eb520854bc41170dfb
 ### Find a non-existent ID
 GET http://localhost:3001/api/persons/5
 
@@ -17,6 +17,6 @@ POST http://localhost:3001/api/persons/
 content-type: application/json
 
 { 
-    "name": "Steve McSteve", 
-    "number": "123456789"
+    "name": "Arto Hellas", 
+    "number": "040-123456"
 }
