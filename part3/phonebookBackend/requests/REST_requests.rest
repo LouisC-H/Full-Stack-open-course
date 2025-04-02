@@ -1,3 +1,4 @@
+# Happy path testing
 ### Home page
 GET http://localhost:3001/info
 
@@ -5,18 +6,47 @@ GET http://localhost:3001/info
 GET http://localhost:3001/api/persons/
 
 ### Find a real ID
-GET http://localhost:3001/api/persons/67e6b5eb520854bc41170dfb
-### Find a non-existent ID
-GET http://localhost:3001/api/persons/5
+GET http://localhost:3001/api/persons/67ec008578ada503ecd66b47
 
 ### Delete
-DELETE  http://localhost:3001/api/persons/842248
+DELETE  http://localhost:3001/api/persons/67ed1cdb49f0f57189ffd5da
 
 ### Post
 POST http://localhost:3001/api/persons/
 content-type: application/json
 
 { 
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122"
+    "name": "Bobby bobbert", 
+    "number": "1234456789"
+}
+
+### Put
+PUT http://localhost:3001/api/persons/67ed1e37d258b7c5fb93f15c
+content-type: application/json
+
+{ 
+    "name": "Robby Robbert", 
+    "number": "987654321"
+}
+
+# Unhappy path testing
+### Find a non-existent ID
+GET http://localhost:3001/api/persons/67ec008578ada503ecd66b44
+
+### Find a wrongly-formatted ID
+GET http://localhost:3001/api/persons/12
+
+### Post an incomplete person (no number)
+POST http://localhost:3001/api/persons/
+content-type: application/json
+
+{ 
+    "name": "Bobby bobbert"
+}
+### Post an incomplete person (no name)
+POST http://localhost:3001/api/persons/
+content-type: application/json
+
+{ 
+    "number": "1234456789"
 }

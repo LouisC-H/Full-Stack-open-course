@@ -72,6 +72,7 @@ app.delete('/api/notes/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+// Put
 app.put('/api/notes/:id', (request, response, next) => {
   const { content, important } = request.body
 
