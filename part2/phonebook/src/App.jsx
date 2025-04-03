@@ -57,6 +57,9 @@ const App = () => {
           }
         )
         .then(sendNotification(`Added ${trimmedName}.`, false))
+        .catch(error => {
+          sendNotification(error.response.data.error, true)
+        })
     } 
     // Else if they are already in the phonebook, check before overwriting them
     else {

@@ -97,6 +97,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
+// Error handler
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
