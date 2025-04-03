@@ -1,1 +1,0 @@
-Link to programme running in Render, works up to 3.18: https://full-stack-open-course-phonebook.onrender.com
