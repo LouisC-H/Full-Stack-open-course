@@ -1,0 +1,21 @@
+{
+  "name": "phonebookBackend",
+  "version": "1.0.0",
+  "description": "Phonebook backend exercises from part 3 of Fullstack Open course",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rd /s /q dist && cd ../../part2/phonebook && npm run build && Xcopy /S /I /E dist ..\\..\\part3\\phonebookBackend\\dist",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+  },
+  "author": "Louis Clement-Harris",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.13.0",
+    "morgan": "^1.10.0"
+  }
+}

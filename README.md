@@ -1,0 +1,1 @@
+This is the place in which I store my work towards the University of Helsinki/Open University's [Full Stack open](https://fullstackopen.com/en/) course.

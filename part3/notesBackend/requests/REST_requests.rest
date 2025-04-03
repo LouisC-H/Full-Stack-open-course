@@ -1,0 +1,44 @@
+GET http://localhost:3001/api/notes/
+
+###
+GET http://localhost:3001/api/notes/67e6af3167057c4e06f396d0
+
+### find a non-existent ID
+GET http://localhost:3001/api/notes/67e6af3167057c4e06f396d1
+
+### find a wrongly formatted ID
+GET http://localhost:3001/api/notes/12
+
+###
+DELETE http://localhost:3001/api/notes/67ed1a236fcf51ea14ec648e
+
+###
+POST http://localhost:3001/api/notes 
+Content-Type: application/json
+
+{
+    "content": "VS code rest client is pretty handy tool",
+    "important": false
+}
+
+###
+PUT http://localhost:3001/api/notes/67ed197b41e28d66af456047
+Content-Type: application/json
+
+{
+    "content": "VS code rest client is overrated IMO",
+    "important": true
+}
+
+
+### Nonsense request
+HEAD  http://localhost:3001/api/persons/
+
+###
+POST http://localhost:3001/api/notes 
+Content-Type: application/json
+
+{
+    "content": "Å",
+    "important": false
+}
