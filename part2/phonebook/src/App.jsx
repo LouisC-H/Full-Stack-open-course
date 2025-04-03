@@ -56,10 +56,10 @@ const App = () => {
             setPeople(people.concat(returnedPerson))
           }
         )
-        .then(sendNotification(`Added ${trimmedName}.`, false))
         .catch(error => {
           sendNotification(error.response.data.error, true)
         })
+        .then(sendNotification(`Added ${trimmedName}.`, false))
     } 
     // Else if they are already in the phonebook, check before overwriting them
     else {
