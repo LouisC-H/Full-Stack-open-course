@@ -1,1 +1,1 @@
-Link to program running in Render, works up to 4.1: https://full-stack-open-course-blogs.onrender.com
+Link to program running in Render, works up to 4.2: https://full-stack-open-course-blogs.onrender.com
