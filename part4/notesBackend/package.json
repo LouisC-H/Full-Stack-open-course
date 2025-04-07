@@ -8,7 +8,7 @@
     "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "build:ui": "rd /s /q dist && cd ../../part2/notes && npm run build && Xcopy /S /I /E dist ..\\..\\part3\\notesBackend\\dist",
+    "build:ui": "rd /s /q dist && cd ../../part2/notes && npm run build && Xcopy /S /I /E dist ..\\..\\part4\\notesBackend\\dist",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Louis Clement-Harris",

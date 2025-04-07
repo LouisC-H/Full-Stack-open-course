@@ -1,0 +1,14 @@
+# Happy path testing
+### Get all
+GET http://localhost:3003/api/blogs
+
+### Post
+POST http://localhost:3003/api/blogs
+content-type: application/json
+
+{
+    "title": "How Juju Veras Petra Necklace Went Viral With Zero Marketing",
+    "author": "Freya Drohan",
+    "url": "https://www.thezoereport.com/fashion/juju-vera-petra-necklace",
+    "likes": 9
+}
