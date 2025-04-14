@@ -115,13 +115,11 @@ const listWithManyBlogsRemixed = [
 ]
 
 test('dummy returns one', () => {
-  const blogs = []
-
-  const result = listHelper.dummy(blogs)
+  const result = listHelper.dummy()
   assert.strictEqual(result, 1)
 })
 
-describe('total likes', () => {
+describe('totalLikes', () => {
   test('empty blogs list, return 0', () => {
     const result = listHelper.totalLikes(emptyBlogsList)
     assert.strictEqual(result, 0)
@@ -225,6 +223,45 @@ describe('mostBlogs', () => {
       blogs: 4
     }
     const result = listHelper.mostBlogs(listWithManyBlogsRemixed)
+    assert.deepStrictEqual(result, expected)
+  })
+})
+
+describe('mostLikes', () => {
+
+  test('empty blogs list', () => {
+    const expected = {
+      author: 'N/A - no blogs found',
+      likes: 0
+    }
+    const result = listHelper.mostLikes(emptyBlogsList)
+    assert.deepStrictEqual(result, expected)
+  })
+
+  test('list has only one blog', () => {
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    }
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.deepStrictEqual(result, expected)
+  })
+
+  test('list has many blogs', () => {
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    }
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    assert.deepStrictEqual(result, expected)
+  })
+
+  test('test the remixed list', () => {
+    const expected = {
+      author: 'Robert C. Martin',
+      likes: 109
+    }
+    const result = listHelper.mostLikes(listWithManyBlogsRemixed)
     assert.deepStrictEqual(result, expected)
   })
 })
