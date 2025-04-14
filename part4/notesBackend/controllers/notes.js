@@ -1,7 +1,7 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
 
-notesRouter.get('/', async (request, response) => { 
+notesRouter.get('/', async (request, response) => {
   const notes = await Note.find({})
   response.json(notes)
 })
@@ -42,20 +42,16 @@ notesRouter.delete('/:id', (request, response, next) => {
 })
 
 notesRouter.put('/:id', (request, response, next) => {
-  const { content, important } = request.body
+  const body = request.body
 
-  Note.findById(request.params.id)
-    .then(note => {
-      if (!note) {
-        return response.status(404).end()
-      }
+  const note = {
+    content: body.content,
+    important: body.important,
+  }
 
-      note.content = content
-      note.important = important
-
-      return note.save().then((updatedNote) => {
-        response.json(updatedNote)
-      })
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then(updatedNote => {
+      response.json(updatedNote)
     })
     .catch(error => next(error))
 })
