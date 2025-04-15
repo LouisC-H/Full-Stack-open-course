@@ -24,6 +24,16 @@ test('all blogs are returned, and in the expected format', async () => {
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
+test('Each note has its own unique identifier named "id"', async () => {
+  const response = await api
+    .get('/api/blogs')
+
+  response.body.forEach(blog => {
+    console.log('blog : ', blog);
+    assert(Object.prototype.hasOwnProperty.call(blog, 'id'))
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
