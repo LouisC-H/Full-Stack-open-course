@@ -4,14 +4,17 @@
   "description": "Fullstack open part 4 - blogs exercises",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js",
-    "test": "node --test",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
+    "connectToTestDb": "cross-env NODE_ENV=test node --watch index.js",
+    "test": "cross-env  NODE_ENV=test node --test",
+    "testOnly": "npm test -- --test-only",
     "lint": "eslint ."
   },
   "author": "Louis Clement-Harris",
   "license": "MIT",
   "dependencies": {
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "mongoose": "^8.13.2"
@@ -19,6 +22,7 @@
   "devDependencies": {
     "@eslint/js": "^9.23.0",
     "@stylistic/eslint-plugin-js": "^4.2.0",
-    "eslint": "^9.23.0"
+    "eslint": "^9.23.0",
+    "supertest": "^7.1.0"
   }
 }
