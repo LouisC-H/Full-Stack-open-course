@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
@@ -9,106 +9,114 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-
-  await Blog.insertMany(helper.initialBlogs)
-})
-
-test('all blogs are returned, and in the expected format', async () => {
-  const response = await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-
-  assert.strictEqual(response.body.length, helper.initialBlogs.length)
-})
-
-test('Each note has its own unique identifier named "id"', async () => {
-  const response = await api
-    .get('/api/blogs')
-
-  response.body.forEach(blog => {
-    assert(Object.prototype.hasOwnProperty.call(blog, 'id'))
+describe('when there are some notes saved initially', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
   })
-})
 
-test('a valid blog can be added ', async () => {
-  const newBlog = {
-    title: 'Turns out people still make blogs?',
-    author: 'Sir Prized',
-    url: 'http://aintthatcrazy.html',
-    likes: 999
-  }
+  describe('testing GET', () => {
+    test('all blogs are returned, and in the expected format', async () => {
+      const response = await api
+        .get('/api/blogs')
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+      assert.strictEqual(response.body.length, helper.initialBlogs.length)
+    })
 
-  const blogsAfterPost = await helper.blogsInDb()
-  assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length + 1)
+    test('Each note has its own unique identifier named "id"', async () => {
+      const response = await api
+        .get('/api/blogs')
 
-  // Also check that the contents has made it into the new collection of saved blogs
-  const titles = blogsAfterPost.map(n => n.title)
-  assert(titles.includes('Turns out people still make blogs?'))
-  const authors = blogsAfterPost.map(n => n.author)
-  assert(authors.includes('Sir Prized'))
-  const urls = blogsAfterPost.map(n => n.url)
-  assert(urls.includes('http://aintthatcrazy.html'))
-  const likes = blogsAfterPost.map(n => n.likes)
-  assert(likes.includes(999))
-})
+      response.body.forEach(blog => {
+        assert(Object.prototype.hasOwnProperty.call(blog, 'id'))
+      })
+    })
+  })
 
-test('adding a blog without likes successfully creates one with default 0', async () => {
-  const newBlog = {
-    title: 'Turns out people still make blogs?',
-    author: 'Sir Prized',
-    url: 'http://aintthatcrazy.html'
-  }
+  describe('testing POST', () => {
+    describe('Happy path', () => {
+      test('a valid blog can be added ', async () => {
+        const newBlog = {
+          title: 'Turns out people still make blogs?',
+          author: 'Sir Prized',
+          url: 'http://aintthatcrazy.html',
+          likes: 999
+        }
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(201)
+          .expect('Content-Type', /application\/json/)
 
-  const blogsAfterPost = await helper.blogsInDb()
+        const blogsAfterPost = await helper.blogsInDb()
+        assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length + 1)
 
-  // Check that the collection of saved blogs contains the new post as expected.
-  const titles = blogsAfterPost.map(n => n.title)
-  assert(titles.includes('Turns out people still make blogs?'))
-  const authors = blogsAfterPost.map(n => n.author)
-  assert(authors.includes('Sir Prized'))
-  const urls = blogsAfterPost.map(n => n.url)
-  assert(urls.includes('http://aintthatcrazy.html'))
-  const likes = blogsAfterPost.map(n => n.likes)
-  assert(likes.includes(0))
-})
+        // Also check that the contents has made it into the new collection of saved blogs
+        const titles = blogsAfterPost.map(n => n.title)
+        assert(titles.includes('Turns out people still make blogs?'))
+        const authors = blogsAfterPost.map(n => n.author)
+        assert(authors.includes('Sir Prized'))
+        const urls = blogsAfterPost.map(n => n.url)
+        assert(urls.includes('http://aintthatcrazy.html'))
+        const likes = blogsAfterPost.map(n => n.likes)
+        assert(likes.includes(999))
+      })
 
-test('adding a blog without a title returns a 400 status code', async () => {
-  const newBlog = {
-    author: 'Sir Prized',
-    url: 'http://aintthatcrazy.html',
-    likes: 999
-  }
+      test('adding a blog without likes successfully creates one with default 0', async () => {
+        const newBlog = {
+          title: 'Turns out people still make blogs?',
+          author: 'Sir Prized',
+          url: 'http://aintthatcrazy.html'
+        }
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
-})
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
 
-test('adding a blog without a url returns a 400 status code', async () => {
-  const newBlog = {
-    title: 'Turns out people still make blogs?',
-    author: 'Sir Prized',
-    likes: 999
-  }
+        const blogsAfterPost = await helper.blogsInDb()
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+        // Check that the collection of saved blogs contains the new post as expected.
+        const titles = blogsAfterPost.map(n => n.title)
+        assert(titles.includes('Turns out people still make blogs?'))
+        const authors = blogsAfterPost.map(n => n.author)
+        assert(authors.includes('Sir Prized'))
+        const urls = blogsAfterPost.map(n => n.url)
+        assert(urls.includes('http://aintthatcrazy.html'))
+        const likes = blogsAfterPost.map(n => n.likes)
+        assert(likes.includes(0))
+      })
+    })
+    describe('sad path', () => {
+      test('adding a blog without a title returns a 400 status code', async () => {
+        const newBlog = {
+          author: 'Sir Prized',
+          url: 'http://aintthatcrazy.html',
+          likes: 999
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+      })
+
+      test('adding a blog without a url returns a 400 status code', async () => {
+        const newBlog = {
+          title: 'Turns out people still make blogs?',
+          author: 'Sir Prized',
+          likes: 999
+        }
+
+        await api
+          .post('/api/blogs')
+          .send(newBlog)
+          .expect(400)
+      })
+    })
+  })
 })
 
 after(async () => {
