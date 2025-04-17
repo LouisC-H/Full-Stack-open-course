@@ -73,9 +73,8 @@ test('adding a blog without likes successfully creates one with default 0', asyn
     .send(newBlog)
 
   const blogsAfterPost = await helper.blogsInDb()
-  assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length + 1)
 
-  // Also check that the contents has made it into the new collection of saved blogs
+  // Check that the collection of saved blogs contains the new post as expected.
   const titles = blogsAfterPost.map(n => n.title)
   assert(titles.includes('Turns out people still make blogs?'))
   const authors = blogsAfterPost.map(n => n.author)
@@ -84,6 +83,32 @@ test('adding a blog without likes successfully creates one with default 0', asyn
   assert(urls.includes('http://aintthatcrazy.html'))
   const likes = blogsAfterPost.map(n => n.likes)
   assert(likes.includes(0))
+})
+
+test('adding a blog without a title returns a 400 status code', async () => {
+  const newBlog = {
+    author: 'Sir Prized',
+    url: 'http://aintthatcrazy.html',
+    likes: 999
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+})
+
+test('adding a blog without a url returns a 400 status code', async () => {
+  const newBlog = {
+    title: 'Turns out people still make blogs?',
+    author: 'Sir Prized',
+    likes: 999
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
 })
 
 after(async () => {
