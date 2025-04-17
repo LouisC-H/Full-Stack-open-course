@@ -61,6 +61,31 @@ test('a valid blog can be added ', async () => {
   assert(likes.includes(999))
 })
 
+test('adding a blog without likes successfully creates one with default 0', async () => {
+  const newBlog = {
+    title: 'Turns out people still make blogs?',
+    author: 'Sir Prized',
+    url: 'http://aintthatcrazy.html'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+
+  const blogsAfterPost = await helper.blogsInDb()
+  assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length + 1)
+
+  // Also check that the contents has made it into the new collection of saved blogs
+  const titles = blogsAfterPost.map(n => n.title)
+  assert(titles.includes('Turns out people still make blogs?'))
+  const authors = blogsAfterPost.map(n => n.author)
+  assert(authors.includes('Sir Prized'))
+  const urls = blogsAfterPost.map(n => n.url)
+  assert(urls.includes('http://aintthatcrazy.html'))
+  const likes = blogsAfterPost.map(n => n.likes)
+  assert(likes.includes(0))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
