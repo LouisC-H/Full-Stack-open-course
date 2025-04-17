@@ -119,7 +119,7 @@ describe('Pre-populated blog database', () => {
   })
   describe('DELETE an existing blog', () => {
     describe('Happy path', () => {
-      test('Delete an existing blog'), async () => {
+      test('Delete an existing blog with a valid ID', async () => {
         const blogsAtStart = await helper.blogsInDb()
         const blogToDelete = blogsAtStart[0]
 
@@ -133,10 +133,10 @@ describe('Pre-populated blog database', () => {
 
         const title = blogsAtEnd.map(r => r.title)
         assert(!title.includes(blogToDelete.title))
-      }
+      })
     })
     describe('Sad path', () => {
-      test('Fail to delete a blog using a nonsense id'), async () => {
+      test('Fail to delete a blog using a hardcoded random ID', async () => {
 
         await api
           .delete('/api/blogs/680105b31583a6fbb550ebd5')
@@ -144,7 +144,45 @@ describe('Pre-populated blog database', () => {
 
         const blogsAtEnd = await helper.blogsInDb()
         assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
-      }
+      })
+    })
+  })
+  describe('PUT - update an existing blog', () => {
+    describe('Happy path', () => {
+      test('Transform an existing blog into a new one, step by step', async () => {
+        const newBlog = {
+          title: 'Turns out people still make blogs?',
+          author: 'Sir Prized',
+          url: 'http://aintthatcrazy.html',
+          likes: 999
+        }
+
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToReplace = blogsAtStart[0]
+
+        await api
+          .put(`/api/blogs/${blogToReplace.id}`)
+          .send(newBlog)
+          .expect(200)
+          .expect('Content-Type', /application\/json/)
+
+        const blogsAfterPost = await helper.blogsInDb()
+        assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length)
+
+        // // Also check that the contents has made it into the new collection of saved blogs, and that the old contents is gone
+        const titles = blogsAfterPost.map(n => n.title)
+        assert(titles.includes('Turns out people still make blogs?'))
+        assert(!titles.includes(blogToReplace.title))
+        const authors = blogsAfterPost.map(n => n.author)
+        assert(authors.includes('Sir Prized'))
+        assert(!titles.includes(blogToReplace.tiauthortle))
+        const urls = blogsAfterPost.map(n => n.url)
+        assert(urls.includes('http://aintthatcrazy.html'))
+        assert(!titles.includes(blogToReplace.url))
+        const likes = blogsAfterPost.map(n => n.likes)
+        assert(likes.includes(999))
+        assert(!titles.includes(blogToReplace.likes))
+      })
     })
   })
 })

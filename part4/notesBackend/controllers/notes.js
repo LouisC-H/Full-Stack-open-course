@@ -34,7 +34,6 @@ notesRouter.delete('/:id', async (request, response) => {
 
 notesRouter.put('/:id', (request, response, next) => {
   const body = request.body
-
   const note = {
     content: body.content,
     important: body.important,

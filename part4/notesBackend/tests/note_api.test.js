@@ -120,6 +120,27 @@ describe('when there are some notes saved initially', () => {
       assert(!contents.includes(noteToDelete.content))
     })
   })
+  test.only('Transform an existing blog into a new one, step by step', async () => {
+    const newNote = {
+      content: 'async/await simplifies making async calls',
+      important: true,
+    }
+
+    const notesAtStart = await helper.notesInDb()
+    const noteToReplace = notesAtStart[0]
+
+    console.log('newNote : ', newNote);
+
+    await api
+      .put(`/api/notes/${noteToReplace.id}`)
+      .send(newNote)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAfterPost = await helper.notesInDb()
+    assert.strictEqual(blogsAfterPost.length, helper.initialNotes.length)
+
+  })
 })
 
 after(async () => {
