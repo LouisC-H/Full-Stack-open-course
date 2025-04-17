@@ -9,13 +9,13 @@ const api = supertest(app)
 
 const Blog = require('../models/blog')
 
-describe('when there are some notes saved initially', () => {
+describe('Pre-populated blog database', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(helper.initialBlogs)
   })
 
-  describe('testing GET', () => {
+  describe('GET all blogs', () => {
     test('all blogs are returned, and in the expected format', async () => {
       const response = await api
         .get('/api/blogs')
@@ -25,7 +25,7 @@ describe('when there are some notes saved initially', () => {
       assert.strictEqual(response.body.length, helper.initialBlogs.length)
     })
 
-    test('Each note has its own unique identifier named "id"', async () => {
+    test('Each blog has its own unique identifier named "id"', async () => {
       const response = await api
         .get('/api/blogs')
 
@@ -35,7 +35,7 @@ describe('when there are some notes saved initially', () => {
     })
   })
 
-  describe('testing POST', () => {
+  describe('POST a new blog', () => {
     describe('Happy path', () => {
       test('a valid blog can be added ', async () => {
         const newBlog = {
@@ -115,6 +115,36 @@ describe('when there are some notes saved initially', () => {
           .send(newBlog)
           .expect(400)
       })
+    })
+  })
+  describe('DELETE an existing blog', () => {
+    describe('Happy path', () => {
+      test('Delete an existing blog'), async () => {
+        const blogsAtStart = await helper.blogsInDb()
+        const blogToDelete = blogsAtStart[0]
+
+        await api
+          .delete(`/api/blogs/${blogToDelete.id}`)
+          .expect(204)
+
+        const blogsAtEnd = await helper.blogsInDb()
+
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+
+        const title = blogsAtEnd.map(r => r.title)
+        assert(!title.includes(blogToDelete.title))
+      }
+    })
+    describe('Sad path', () => {
+      test('Fail to delete a blog using a nonsense id'), async () => {
+
+        await api
+          .delete('/api/blogs/680105b31583a6fbb550ebd5')
+          .expect(204)
+
+        const blogsAtEnd = await helper.blogsInDb()
+        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+      }
     })
   })
 })
