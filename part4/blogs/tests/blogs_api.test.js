@@ -169,18 +169,21 @@ describe('Pre-populated blog database', () => {
         const blogsAfterPost = await helper.blogsInDb()
         assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length)
 
-        // // Also check that the contents has made it into the new collection of saved blogs, and that the old contents is gone
+        // Also check that the contents has made it into the new collection of saved blogs, and that the old contents is gone
         const titles = blogsAfterPost.map(n => n.title)
-        assert(titles.includes('Turns out people still make blogs?'))
+        assert(titles.includes(newBlog.title))
         assert(!titles.includes(blogToReplace.title))
+
         const authors = blogsAfterPost.map(n => n.author)
-        assert(authors.includes('Sir Prized'))
+        assert(authors.includes(newBlog.tiauthortle))
         assert(!titles.includes(blogToReplace.tiauthortle))
+
         const urls = blogsAfterPost.map(n => n.url)
-        assert(urls.includes('http://aintthatcrazy.html'))
+        assert(urls.includes(newBlog.url))
         assert(!titles.includes(blogToReplace.url))
+
         const likes = blogsAfterPost.map(n => n.likes)
-        assert(likes.includes(999))
+        assert(likes.includes(newBlog.likes))
         assert(!titles.includes(blogToReplace.likes))
       })
     })

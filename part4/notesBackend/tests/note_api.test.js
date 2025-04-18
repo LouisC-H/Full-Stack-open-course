@@ -1,4 +1,4 @@
-const { test, after, beforeEach, describe } = require('node:test')
+const { test, after, before, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -8,11 +8,20 @@ const api = supertest(app)
 const helper = require('./test_helper')
 
 const Note = require('../models/note')
+const User = require('../models/user')
+
+
+before(async () => {
+  await User.deleteMany({})
+  await User.insertOne(helper.initialUser)
+})
 
 describe('when there are some notes saved initially', () => {
   beforeEach(async () => {
     await Note.deleteMany({})
-    await Note.insertMany(helper.initialNotes)
+    this.initialNotes = await helper.initialiseNotes()
+    await Note.insertMany(this.initialNotes)
+    await new Promise(resolve => setTimeout(resolve, 100))
   })
 
   test('notes are returned as json', async () => {
@@ -25,12 +34,11 @@ describe('when there are some notes saved initially', () => {
   test('all notes are returned', async () => {
     const response = await api.get('/api/notes')
 
-    assert.strictEqual(response.body.length, helper.initialNotes.length)
+    assert.strictEqual(response.body.length, this.initialNotes.length)
   })
 
   test('a specific note is within the returned notes', async () => {
     const response = await api.get('/api/notes')
-
     const contents = response.body.map(r => r.content)
     assert(contents.includes('Browser can execute only JavaScript'))
   })
@@ -72,6 +80,7 @@ describe('when there are some notes saved initially', () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
         important: true,
+        userId: await helper.findUserId()
       }
 
       await api
@@ -81,7 +90,7 @@ describe('when there are some notes saved initially', () => {
         .expect('Content-Type', /application\/json/)
 
       const notesAtEnd = await helper.notesInDb()
-      assert.strictEqual(notesAtEnd.length, helper.initialNotes.length + 1)
+      assert.strictEqual(notesAtEnd.length, this.initialNotes.length + 1)
 
       const contents = notesAtEnd.map(n => n.content)
       assert(contents.includes('async/await simplifies making async calls'))
@@ -89,7 +98,8 @@ describe('when there are some notes saved initially', () => {
 
     test('fails with status code 400 if data invalid', async () => {
       const newNote = {
-        important: true
+        important: true,
+        userId: await helper.findUserId()
       }
 
       await api
@@ -99,7 +109,7 @@ describe('when there are some notes saved initially', () => {
 
       const notesAtEnd = await helper.notesInDb()
 
-      assert.strictEqual(notesAtEnd.length, helper.initialNotes.length)
+      assert.strictEqual(notesAtEnd.length, this.initialNotes.length)
     })
   })
 
@@ -114,22 +124,22 @@ describe('when there are some notes saved initially', () => {
 
       const notesAtEnd = await helper.notesInDb()
 
-      assert.strictEqual(notesAtEnd.length, helper.initialNotes.length - 1)
+      assert.strictEqual(notesAtEnd.length, this.initialNotes.length - 1)
 
       const contents = notesAtEnd.map(r => r.content)
       assert(!contents.includes(noteToDelete.content))
     })
   })
-  test.only('Transform an existing blog into a new one, step by step', async () => {
+
+  test('Transform an existing blog into a new one, step by step', async () => {
     const newNote = {
       content: 'async/await simplifies making async calls',
       important: true,
+      userId: await helper.findUserId()
     }
 
     const notesAtStart = await helper.notesInDb()
     const noteToReplace = notesAtStart[0]
-
-    console.log('newNote : ', newNote);
 
     await api
       .put(`/api/notes/${noteToReplace.id}`)
@@ -137,9 +147,13 @@ describe('when there are some notes saved initially', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    const blogsAfterPost = await helper.notesInDb()
-    assert.strictEqual(blogsAfterPost.length, helper.initialNotes.length)
+    const notesAfterPost = await helper.notesInDb()
+    assert.strictEqual(notesAfterPost.length, this.initialNotes.length)
 
+    // Also check that the contents has made it into the new collection of saved notes, and that the old contents is gone
+    const content = notesAfterPost.map(n => n.content)
+    assert(content.includes(newNote.content))
+    assert(!content.includes(noteToReplace.title))
   })
 })
 

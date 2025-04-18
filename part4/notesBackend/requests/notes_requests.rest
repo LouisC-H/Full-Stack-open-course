@@ -3,12 +3,6 @@ GET http://localhost:3001/api/notes/
 ###
 GET http://localhost:3001/api/notes/67e6af3167057c4e06f396d0
 
-### find a non-existent ID
-GET http://localhost:3001/api/notes/67e6af3167057c4e06f396d1
-
-### find a wrongly formatted ID
-GET http://localhost:3001/api/notes/12
-
 ###
 DELETE http://localhost:3001/api/notes/67ed1a236fcf51ea14ec648e
 
@@ -17,8 +11,9 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "HTML is easy",
-    "important": true
+    "content": "This note is being sent to our user",
+    "important": false,
+    "userId" : "68024c0217161330ed0c32dc"
 }
 
 ###
@@ -30,6 +25,12 @@ Content-Type: application/json
     "important": true
 }
 
+### SAD PATH
+### find a non-existent ID
+GET http://localhost:3001/api/notes/67e6af3167057c4e06f396d1
+
+### find a wrongly formatted ID
+GET http://localhost:3001/api/notes/12
 
 ### Nonsense request
 HEAD  http://localhost:3001/api/persons/
