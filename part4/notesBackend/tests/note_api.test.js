@@ -13,7 +13,8 @@ const User = require('../models/user')
 
 before(async () => {
   await User.deleteMany({})
-  await User.insertOne(helper.initialUser)
+  await api.post('/api/users')
+    .send(helper.initialUser)
 })
 
 describe('when there are some notes saved initially', () => {
@@ -21,7 +22,7 @@ describe('when there are some notes saved initially', () => {
     await Note.deleteMany({})
     this.initialNotes = await helper.initialiseNotes()
     await Note.insertMany(this.initialNotes)
-    await new Promise(resolve => setTimeout(resolve, 100))
+    await new Promise(resolve => setTimeout(resolve, 200))
   })
 
   test('notes are returned as json', async () => {
@@ -76,6 +77,12 @@ describe('when there are some notes saved initially', () => {
   })
 
   describe('addition of a new note', () => {
+    beforeEach(async () => {
+      const response = await api
+        .post('/api/login')
+        .send(helper.iUserLogin)
+      this.bearerToken = response.body.token
+    })
     test('succeeds with valid data', async () => {
       const newNote = {
         content: 'async/await simplifies making async calls',
@@ -86,6 +93,7 @@ describe('when there are some notes saved initially', () => {
       await api
         .post('/api/notes')
         .send(newNote)
+        .set('Authorization', `Bearer ${this.bearerToken}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -105,6 +113,7 @@ describe('when there are some notes saved initially', () => {
       await api
         .post('/api/notes')
         .send(newNote)
+        .set('Authorization', `Bearer ${this.bearerToken}`)
         .expect(400)
 
       const notesAtEnd = await helper.notesInDb()

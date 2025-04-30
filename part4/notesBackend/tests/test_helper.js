@@ -2,9 +2,14 @@ const Note = require('../models/note')
 const User = require('../models/user')
 
 const initialUser = {
-  username: 'test',
+  username: 'testSuperUser',
   name: 'Test User',
-  password: 'aksunryfvlwasujhernlkasyuh',
+  password: 'examplePassword'
+}
+
+const iUserLogin = {
+  username: 'testSuperUser',
+  password: 'examplePassword'
 }
 
 const initialiseNotes = async () => {
@@ -54,5 +59,5 @@ const findUserId = async () => {
 }
 
 module.exports = {
-  initialiseNotes, initialUser, nonExistingId, notesInDb, findNoteID, usersInDb, findUserId
+  initialUser, iUserLogin, initialiseNotes, nonExistingId, notesInDb, findNoteID, usersInDb, findUserId
 }

@@ -9,6 +9,7 @@ DELETE http://localhost:3001/api/notes/67ed1a236fcf51ea14ec648e
 ###
 POST http://localhost:3001/api/notes 
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY4MDI0YzAyMTcxNjEzMzBlZDBjMzJkYyIsImlhdCI6MTc0NjAxNzE3OSwiZXhwIjoxNzQ2MDIwNzc5fQ.hN7DO1eGWC_EEg7K0YrRkodwjR15a1opGqxxCMX8xSQ
 
 {
     "content": "This note is being sent to our user",

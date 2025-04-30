@@ -1,0 +1,29 @@
+###### HAPPY PATH
+### Log in
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "root",
+    "password": "salainen"
+}
+
+
+###### SAD PATH
+### Wrong password login
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "root",
+    "password": "68s5ad1f68asd7f1"
+}
+
+### Wrong username login
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "as537df1asd52841f53as2d1f",
+    "password": "68s5ad1f68asd7f1"
+}
