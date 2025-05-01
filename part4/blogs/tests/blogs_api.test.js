@@ -175,8 +175,8 @@ describe('Pre-populated blog database', () => {
         assert(!titles.includes(blogToReplace.title))
 
         const authors = blogsAfterPost.map(n => n.author)
-        assert(authors.includes(newBlog.tiauthortle))
-        assert(!titles.includes(blogToReplace.tiauthortle))
+        assert(authors.includes(newBlog.author))
+        assert(!titles.includes(blogToReplace.author))
 
         const urls = blogsAfterPost.map(n => n.url)
         assert(urls.includes(newBlog.url))

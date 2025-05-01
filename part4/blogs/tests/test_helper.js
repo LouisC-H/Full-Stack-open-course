@@ -1,4 +1,34 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const initialUser = {
+  username: 'testSuperUser',
+  name: 'Test User',
+  password: 'examplePassword'
+}
+
+const validUser = {
+  username: 'superOriginalUsername',
+  name: 'Super Hecking Valid',
+  password: 'trailblazer',
+}
+
+const sameUsernameUser = {
+  username: 'testSuperUser',
+  name: 'Definitely not the other guy',
+  password: 'a different password',
+}
+
+const smallUsernameUser = {
+  username: 'a',
+  name: 'Small Username',
+  password: 'cutesy'
+}
+const smallPasswordUser = {
+  username: 'Small Password',
+  name: 'Teeny P',
+  password: 'e'
+}
 
 const initialBlogs = [
   {
@@ -44,6 +74,16 @@ const blogsInDb = async () => {
   return blogs.map(blog => blog.toJSON())
 }
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
+
+const findUserId = async () => {
+  const usersList = await usersInDb()
+  return usersList[0].id
+}
+
 module.exports = {
-  initialBlogs, blogsInDb
+  initialUser, validUser, sameUsernameUser, smallUsernameUser, smallPasswordUser, initialBlogs, blogsInDb, usersInDb, findUserId
 }
