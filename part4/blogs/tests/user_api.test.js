@@ -2,17 +2,19 @@ const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+
 const app = require('../app')
 const api = supertest(app)
 
 const helper = require('./test_helper')
+const userData = require('./usersData')
 
 const User = require('../models/user')
 
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
     await User.deleteMany({})
-    await api.post('/api/users').send(helper.initialUser)
+    await api.post('/api/users').send(userData.initialUser)
   })
 
   test('Happy path - creation succeeds with a fresh username', async () => {
@@ -20,7 +22,7 @@ describe('when there is initially one user in db', () => {
 
     await api
       .post('/api/users')
-      .send(helper.validUser)
+      .send(userData.validUser)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -28,7 +30,7 @@ describe('when there is initially one user in db', () => {
     assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
 
     const usernames = usersAtEnd.map(u => u.username)
-    assert(usernames.includes(helper.validUser.username))
+    assert(usernames.includes(userData.validUser.username))
   })
 
   describe('Sad path', () => {
@@ -37,7 +39,7 @@ describe('when there is initially one user in db', () => {
 
       const result = await api
         .post('/api/users')
-        .send(helper.sameUsernameUser)
+        .send(userData.sameUsernameUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
@@ -52,7 +54,7 @@ describe('when there is initially one user in db', () => {
 
       const result = await api
         .post('/api/users')
-        .send(helper.smallUsernameUser)
+        .send(userData.smallUsernameUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
@@ -68,7 +70,7 @@ describe('when there is initially one user in db', () => {
 
       const result = await api
         .post('/api/users')
-        .send(helper.smallPasswordUser)
+        .send(userData.smallPasswordUser)
         .expect(400)
         .expect('Content-Type', /application\/json/)
 

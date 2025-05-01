@@ -1,0 +1,16 @@
+# Happy path testing
+### Get all
+GET http://localhost:3003/api/blogs
+
+### Post
+POST http://localhost:3003/api/blogs
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RTdXBlclVzZXIiLCJpZCI6IjY4MTM3OWNmMzhkYmE4OTRkNzRiODM5OSIsImlhdCI6MTc0NjEwNzA1MSwiZXhwIjoxNzQ2MTEwNjUxfQ.Jzvd0ZUpUBD53-GcpEpc_8CcGFyAFtPLb7CIXMPgAS0
+
+
+{
+    "title": "Mental Health Fridays: Blurring out the stigma",
+    "author": "Ameena k.g ",
+    "url": "https://randomsbyarandom.wordpress.com/2015/08/16/mental-health-fridays-blurring-out-the-stigma/",
+    "likes": 90
+}

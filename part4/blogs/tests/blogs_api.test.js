@@ -1,18 +1,30 @@
-const { test, after, beforeEach, describe } = require('node:test')
+const { test, after, beforeEach, before, describe } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
 
-const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 
+const helper = require('./test_helper')
+const userData = require('./usersData')
+const blogsData = require('./blogsData')
+
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
 
 describe('Pre-populated blog database', () => {
+
+  before(async () => {
+    await User.deleteMany({})
+    await api.post('/api/users').send(userData.initialUser)
+  })
+
   beforeEach(async () => {
     await Blog.deleteMany({})
-    await Blog.insertMany(helper.initialBlogs)
+    await Blog.insertMany(blogsData.initialBlogs)
+    await new Promise(resolve => setTimeout(resolve, 200))
   })
 
   describe('GET all blogs', () => {
@@ -22,7 +34,7 @@ describe('Pre-populated blog database', () => {
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
-      assert.strictEqual(response.body.length, helper.initialBlogs.length)
+      assert.strictEqual(response.body.length, blogsData.initialBlogs.length)
     })
 
     test('Each blog has its own unique identifier named "id"', async () => {
@@ -36,23 +48,24 @@ describe('Pre-populated blog database', () => {
   })
 
   describe('POST a new blog', () => {
+    beforeEach(async () => {
+      const response = await api
+        .post('/api/login')
+        .send(userData.iUserLogin)
+      this.bearerToken = response.body.token
+    })
     describe('Happy path', () => {
-      test('a valid blog can be added ', async () => {
-        const newBlog = {
-          title: 'Turns out people still make blogs?',
-          author: 'Sir Prized',
-          url: 'http://aintthatcrazy.html',
-          likes: 999
-        }
+      test.only('a valid blog can be added ', async () => {
 
         await api
           .post('/api/blogs')
-          .send(newBlog)
+          .send(blogsData.newBlog)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(201)
           .expect('Content-Type', /application\/json/)
 
         const blogsAfterPost = await helper.blogsInDb()
-        assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length + 1)
+        assert.strictEqual(blogsAfterPost.length, blogsData.initialBlogs.length + 1)
 
         // Also check that the contents has made it into the new collection of saved blogs
         const titles = blogsAfterPost.map(n => n.title)
@@ -66,15 +79,11 @@ describe('Pre-populated blog database', () => {
       })
 
       test('adding a blog without likes successfully creates one with default 0', async () => {
-        const newBlog = {
-          title: 'Turns out people still make blogs?',
-          author: 'Sir Prized',
-          url: 'http://aintthatcrazy.html'
-        }
 
         await api
           .post('/api/blogs')
-          .send(newBlog)
+          .send(blogsData.noLikes)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
 
         const blogsAfterPost = await helper.blogsInDb()
 
@@ -91,28 +100,20 @@ describe('Pre-populated blog database', () => {
     })
     describe('sad path', () => {
       test('adding a blog without a title returns a 400 status code', async () => {
-        const newBlog = {
-          author: 'Sir Prized',
-          url: 'http://aintthatcrazy.html',
-          likes: 999
-        }
 
         await api
           .post('/api/blogs')
-          .send(newBlog)
+          .send(blogsData.noTitle)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(400)
       })
 
       test('adding a blog without a url returns a 400 status code', async () => {
-        const newBlog = {
-          title: 'Turns out people still make blogs?',
-          author: 'Sir Prized',
-          likes: 999
-        }
 
         await api
           .post('/api/blogs')
-          .send(newBlog)
+          .send(blogsData.noURL)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(400)
       })
     })
@@ -129,7 +130,7 @@ describe('Pre-populated blog database', () => {
 
         const blogsAtEnd = await helper.blogsInDb()
 
-        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+        assert.strictEqual(blogsAtEnd.length, blogsData.initialBlogs.length - 1)
 
         const title = blogsAtEnd.map(r => r.title)
         assert(!title.includes(blogToDelete.title))
@@ -143,47 +144,41 @@ describe('Pre-populated blog database', () => {
           .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
-        assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+        assert.strictEqual(blogsAtEnd.length, blogsData.initialBlogs.length)
       })
     })
   })
   describe('PUT - update an existing blog', () => {
     describe('Happy path', () => {
       test('Transform an existing blog into a new one, step by step', async () => {
-        const newBlog = {
-          title: 'Turns out people still make blogs?',
-          author: 'Sir Prized',
-          url: 'http://aintthatcrazy.html',
-          likes: 999
-        }
 
         const blogsAtStart = await helper.blogsInDb()
         const blogToReplace = blogsAtStart[0]
 
         await api
           .put(`/api/blogs/${blogToReplace.id}`)
-          .send(newBlog)
+          .send(blogsData.newBlog)
           .expect(200)
           .expect('Content-Type', /application\/json/)
 
         const blogsAfterPost = await helper.blogsInDb()
-        assert.strictEqual(blogsAfterPost.length, helper.initialBlogs.length)
+        assert.strictEqual(blogsAfterPost.length, blogsData.initialBlogs.length)
 
         // Also check that the contents has made it into the new collection of saved blogs, and that the old contents is gone
         const titles = blogsAfterPost.map(n => n.title)
-        assert(titles.includes(newBlog.title))
+        assert(titles.includes(blogsData.newBlog.title))
         assert(!titles.includes(blogToReplace.title))
 
         const authors = blogsAfterPost.map(n => n.author)
-        assert(authors.includes(newBlog.author))
+        assert(authors.includes(blogsData.newBlog.author))
         assert(!titles.includes(blogToReplace.author))
 
         const urls = blogsAfterPost.map(n => n.url)
-        assert(urls.includes(newBlog.url))
+        assert(urls.includes(blogsData.newBlog.url))
         assert(!titles.includes(blogToReplace.url))
 
         const likes = blogsAfterPost.map(n => n.likes)
-        assert(likes.includes(newBlog.likes))
+        assert(likes.includes(blogsData.newBlog.likes))
         assert(!titles.includes(blogToReplace.likes))
       })
     })
