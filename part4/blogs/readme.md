@@ -1,1 +1,1 @@
-Link to program running in Render, works up to 4.2: https://full-stack-open-course-blogs.onrender.com
+Works locally and tests are passing after having completed part 4.
