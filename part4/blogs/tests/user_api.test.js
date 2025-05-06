@@ -74,8 +74,6 @@ describe('when there is initially one user in db', () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
-      console.log('result.body.error : ', result.body.error);
-
       assert(result.body.error.includes('Password is shorter than the minimum allowed length (3).'))
 
       const usersAtEnd = await helper.usersInDb()

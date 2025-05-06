@@ -24,6 +24,10 @@ describe('Pre-populated blog database', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(blogsData.initialBlogs)
+    const response = await api
+      .post('/api/login')
+      .send(userData.iUserLogin)
+    this.bearerToken = response.body.token
     await new Promise(resolve => setTimeout(resolve, 200))
   })
 
@@ -48,15 +52,8 @@ describe('Pre-populated blog database', () => {
   })
 
   describe('POST a new blog', () => {
-    beforeEach(async () => {
-      const response = await api
-        .post('/api/login')
-        .send(userData.iUserLogin)
-      this.bearerToken = response.body.token
-    })
     describe('Happy path', () => {
-      test.only('a valid blog can be added ', async () => {
-
+      test('A valid blog can be added ', async () => {
         await api
           .post('/api/blogs')
           .send(blogsData.newBlog)
@@ -78,8 +75,7 @@ describe('Pre-populated blog database', () => {
         assert(likes.includes(999))
       })
 
-      test('adding a blog without likes successfully creates one with default 0', async () => {
-
+      test('Adding a blog without likes successfully creates one with default 0', async () => {
         await api
           .post('/api/blogs')
           .send(blogsData.noLikes)
@@ -98,9 +94,8 @@ describe('Pre-populated blog database', () => {
         assert(likes.includes(0))
       })
     })
-    describe('sad path', () => {
-      test('adding a blog without a title returns a 400 status code', async () => {
-
+    describe('Sad path', () => {
+      test('Adding a blog without a title returns a 400 status code', async () => {
         await api
           .post('/api/blogs')
           .send(blogsData.noTitle)
@@ -108,43 +103,75 @@ describe('Pre-populated blog database', () => {
           .expect(400)
       })
 
-      test('adding a blog without a url returns a 400 status code', async () => {
-
+      test('Adding a blog without a url returns a 400 status code', async () => {
         await api
           .post('/api/blogs')
           .send(blogsData.noURL)
           .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(400)
       })
+
+      test('Adding a blog without authorization returns a 401 status code', async () => {
+        await api
+          .post('/api/blogs')
+          .send(blogsData.noURL)
+          .expect(401)
+      })
     })
   })
+
   describe('DELETE an existing blog', () => {
     describe('Happy path', () => {
       test('Delete an existing blog with a valid ID', async () => {
-        const blogsAtStart = await helper.blogsInDb()
-        const blogToDelete = blogsAtStart[0]
+        // Post a blog from a known ID
+        const postResponse = await api
+          .post('/api/blogs')
+          .send(blogsData.newBlog)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
 
+        const idToDelete = postResponse.body.id
+
+        // Delete that same blog
         await api
-          .delete(`/api/blogs/${blogToDelete.id}`)
+          .delete(`/api/blogs/${idToDelete}`)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
 
-        assert.strictEqual(blogsAtEnd.length, blogsData.initialBlogs.length - 1)
+        assert.strictEqual(blogsAtEnd.length, blogsData.initialBlogs.length)
 
-        const title = blogsAtEnd.map(r => r.title)
-        assert(!title.includes(blogToDelete.title))
+        const titles = blogsAtEnd.map(r => r.title)
+        assert(!titles.includes('Turns out people still make blogs?'))
       })
     })
     describe('Sad path', () => {
       test('Fail to delete a blog using a hardcoded random ID', async () => {
-
         await api
           .delete('/api/blogs/680105b31583a6fbb550ebd5')
+          .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(204)
 
         const blogsAtEnd = await helper.blogsInDb()
         assert.strictEqual(blogsAtEnd.length, blogsData.initialBlogs.length)
+      })
+
+      test('Deleting a blog without authorization returns a 401 status code', async () => {
+        // Post a blog from a known ID
+        const postResponse = await api
+          .post('/api/blogs')
+          .send(blogsData.newBlog)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
+
+        const idToDelete = postResponse.body.id
+
+        // Delete that same blog
+        await api
+          .delete(`/api/blogs/${idToDelete}`)
+          .expect(401)
+
+        const blogsAtEnd = await helper.blogsInDb()
+        assert.strictEqual(blogsAtEnd.length, blogsData.initialBlogs.length + 1)
       })
     })
   })
