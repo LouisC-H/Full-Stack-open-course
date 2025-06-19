@@ -10,7 +10,7 @@
     "test": "cross-env  NODE_ENV=test node --test",
     "testOnly": "npm test -- --test-only",
     "lint": "eslint .",
-    "build:ui": "rd /s /q dist && cd ../../part2/notes && npm run build && Xcopy /S /I /E dist ..\\..\\part4\\notesBackend\\dist",
+    "build:ui": "rd /s /q dist && cd ../../part5/notes && npm run build && Xcopy /S /I /E dist ..\\..\\part5\\notesBackend\\dist",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Louis Clement-Harris",

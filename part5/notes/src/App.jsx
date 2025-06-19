@@ -3,13 +3,15 @@ import Note from './components/Note'
 import noteService from './services/notesDb'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
+import LoginForm from './components/LoginForm'
+import NewNoteForm from './components/NewNoteForm'
+import LoggedInStatus from './components/Logout'
 
 const App = () => {
-  const [notes, setNotes] = useState(null)
-  const [newNote, setNewNote] = useState('')
+  const [notes, setNotes] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
-
+  const [user, setUser] = useState(null)
 
   useEffect( () => {
     noteService
@@ -19,6 +21,14 @@ const App = () => {
       })
   }, [])
 
+    useEffect(() => {
+      const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        setUser(user)
+        noteService.setToken(user.token)
+      }
+    }, [])
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
@@ -39,38 +49,24 @@ const App = () => {
         setNotes(notes.filter(n => n.id !== id))
       })
   }
-  
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-  
-  noteService
-    .create(noteObject)
-    .then(returnedNote  => {
-      setNotes(notes.concat(returnedNote ))
-      setNewNote('')
-    })
-}
-
-  const handleNoteChange = (event) => {    
-    setNewNote(event.target.value)
-  }
-
 
   const notesToShow = showAll
   ? notes
   : notes.filter(note => note.important)
 
-    // do not render anything if notes is still null
-    if (!notes) {     return null   }
-
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
+
+      {user === null ?
+      <LoginForm setUser={setUser} setErrorMessage={setErrorMessage}/> :
+      <div><LoggedInStatus user={user} setUser={setUser}/>
+      <NewNoteForm notes={notes}setNotes={setNotes}/>
+      </div>
+      
+      }
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -84,13 +80,6 @@ const App = () => {
           />
         )}
       </ul>
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange}
-        />
-        <button type="submit">save</button>
-      </form>  
       <Footer />
     </div>
   )
