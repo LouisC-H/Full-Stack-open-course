@@ -1,7 +1,7 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const middleware = require('../utils/middleware');
+const middleware = require('../utils/middleware')
 
 blogsRouter.get('', async (request, response) => {
   const blogs = await Blog.find({})
@@ -38,7 +38,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
     if ( blogToDelete.user.toString() !== request.user.toString() ) {
       return response.status(401).json({ error: 'invalid permissions - blog not created by user' })
     }
-  } catch (error) {
+  } catch {
     // If it can't be found, return a 204 'no content' status
     response.status(204).end()
   }

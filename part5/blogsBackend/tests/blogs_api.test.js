@@ -28,7 +28,8 @@ describe('Pre-populated blog database', () => {
       .post('/api/login')
       .send(userData.iUserLogin)
     this.bearerToken = response.body.token
-    await new Promise(resolve => setTimeout(resolve, 200))
+    // Note: timeout is probably overkill, but I found that the tests could randomly fail if the tests were running too quickly one after the other
+    await new Promise(resolve => setTimeout(resolve, 500))
   })
 
   describe('GET all blogs', () => {

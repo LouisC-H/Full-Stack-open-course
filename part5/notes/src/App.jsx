@@ -5,7 +5,7 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import NewNoteForm from './components/NewNoteForm'
-import LoggedInStatus from './components/Logout'
+import LoggedInStatus from './components/LoggedInStatus'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -21,14 +21,14 @@ const App = () => {
       })
   }, [])
 
-    useEffect(() => {
-      const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
-      if (loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON)
-        setUser(user)
-        noteService.setToken(user.token)
-      }
-    }, [])
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
