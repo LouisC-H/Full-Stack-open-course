@@ -11,7 +11,6 @@ const NewBlogForm = ({user, blogs, setBlogs, sendNotification}) => {
   const handleURLChange = (event) => {setURL(event.target.value)}
 
   const addBlog = (event) => {
-    console.log('blogs : ', blogs);
     event.preventDefault()
     const newBlog = {
       title: title,
@@ -22,7 +21,7 @@ const NewBlogForm = ({user, blogs, setBlogs, sendNotification}) => {
     blogService
       .create(newBlog)
       .then(returnedBlog  => {
-        sendNotification(`New blog /"${title}/" added.`, false)
+        sendNotification(`New blog "${title}" added.`, false)
         setBlogs(blogs.concat(returnedBlog))
         setTitle('')
         setAuthor('')
