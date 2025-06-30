@@ -1,33 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import noteService from '../services/notesDb'
 
-const NewNoteForm = ({notes, setNotes}) => {
+const NewNoteForm = ({createNote}) => {
   const [newNote, setNewNote] = useState('')
 
   const handleNoteChange = (event) => {setNewNote(event.target.value)}
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-    noteService
-      .create(noteObject)
-      .then(returnedNote  => {
-        setNotes(notes.concat(returnedNote ))
-        setNewNote('')
+    const addNote = (event) => {
+      event.preventDefault()
+      createNote({
+        content: newNote,
+        important: true
       })
-  }
+      setNewNote('')
+    }
 
   return (
-  <form onSubmit={addNote}>
-    <input
-      value={newNote}
-      onChange={handleNoteChange}
-    />
-    <button type="submit">save</button>
-  </form> 
+  <div>
+    <h2>Create a new note</h2>
+    <form onSubmit={addNote}>
+      <input
+        value={newNote}
+        onChange={handleNoteChange}
+      />
+      <button type="submit">save</button>
+    </form> 
+  </div>
   )
 }
 

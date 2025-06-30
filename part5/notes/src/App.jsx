@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Note from './components/Note'
 import noteService from './services/notesDb'
 import Notification from './components/Notification'
@@ -6,12 +6,14 @@ import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import NewNoteForm from './components/NewNoteForm'
 import LoggedInStatus from './components/LoggedInStatus'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect( () => {
     noteService
@@ -54,17 +56,32 @@ const App = () => {
   ? notes
   : notes.filter(note => note.important)
 
+  const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
+    noteService
+      .create(noteObject)
+      .then(returnedNote  => {
+        setNotes(notes.concat(returnedNote))
+      })
+  }
+
+  const noteFormRef = useRef()
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
       {user === null ?
-      <LoginForm setUser={setUser} setErrorMessage={setErrorMessage}/> :
-      <div><LoggedInStatus user={user} setUser={setUser}/>
-      <NewNoteForm notes={notes}setNotes={setNotes}/>
+      <Togglable buttonLabel='login'>
+        <LoginForm setUser={setUser} setErrorMessage={setErrorMessage}/> 
+      </Togglable>:
+      <div>
+        <LoggedInStatus user={user} setUser={setUser}/>
+        <Togglable buttonLabel='new note' ref={noteFormRef}>
+          <NewNoteForm createNote={addNote}/>
+        </Togglable>
       </div>
-      
       }
 
       <div>
