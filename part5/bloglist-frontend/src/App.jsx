@@ -62,7 +62,7 @@ const App = () => {
       <h2>Blogs</h2>
       <Notification message={notifMessage} isError={isError}/>
       <LoggedInStatus user={user} setUser={setUser}/>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <h3>Create new blog</h3>
         <NewBlogForm user={user} createBlog={addBlog} sendNotification={sendNotification}/>
       </Togglable>
