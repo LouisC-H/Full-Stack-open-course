@@ -47,6 +47,16 @@ const App = () => {
       })
   }
 
+    const updateBlog = (id, newBlog) => {
+    blogFormRef.current.toggleVisibility()
+    console.log('id, newBlog : ', id, newBlog);
+    blogService
+      .update(id, newBlog)
+      .then(returnedBlog  => {
+        setBlogs(blogs.map( blog => blog.id === id ? returnedBlog : blog))
+      })
+  }
+
   if (user === null) {
     return (
       <div>
@@ -67,7 +77,7 @@ const App = () => {
         <NewBlogForm user={user} createBlog={addBlog} sendNotification={sendNotification}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       )}
     </div>
   )

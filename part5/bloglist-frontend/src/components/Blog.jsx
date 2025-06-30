@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [seeMore, setSeeMore] = useState(false)
 
   const blogStyle = {
@@ -14,7 +14,16 @@ const Blog = ({ blog }) => {
   const toggleViewMore = () => {setSeeMore(!seeMore)}
 
   const addLike = () => {
-    console.log(`Adding like to blog: ${blog.id}`);
+    event.preventDefault()
+    updateBlog(
+      blog.id,
+      {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user,
+    })
   }
 
   const VMLabel = seeMore
