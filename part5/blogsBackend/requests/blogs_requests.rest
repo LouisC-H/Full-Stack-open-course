@@ -5,7 +5,7 @@ GET http://localhost:3003/api/blogs
 ### Post
 POST http://localhost:3003/api/blogs
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RTdXBlclVzZXIiLCJpZCI6IjY4MTM3OWNmMzhkYmE4OTRkNzRiODM5OSIsImlhdCI6MTc1MTAzNTcwMCwiZXhwIjoxNzUxMDM5MzAwfQ.XwcbcraB-4UQm5ruvenJzRkVQED_U2PM8eZjnVBA0OY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RTdXBlclVzZXIiLCJpZCI6IjY4MTM3OWNmMzhkYmE4OTRkNzRiODM5OSIsImlhdCI6MTc1MTI3OTc5NCwiZXhwIjoxNzUxMjgzMzk0fQ.Vl2mNLjsp3ai3iBREj0wsOimtOZPCvw7kFIwGaMfLMo
 
 {
     "title": "Mental Health Fridays: Blurring out the stigma",

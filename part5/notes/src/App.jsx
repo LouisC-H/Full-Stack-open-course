@@ -56,6 +56,8 @@ const App = () => {
   ? notes
   : notes.filter(note => note.important)
 
+  const noteFormRef = useRef()
+
   const addNote = (noteObject) => {
     noteFormRef.current.toggleVisibility()
     noteService
@@ -64,8 +66,6 @@ const App = () => {
         setNotes(notes.concat(returnedNote))
       })
   }
-
-  const noteFormRef = useRef()
 
   return (
     <div>

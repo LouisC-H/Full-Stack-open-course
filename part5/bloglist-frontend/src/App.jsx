@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogService'
 import LoginForm from './components/LoginForm'
@@ -28,7 +28,7 @@ const App = () => {
     }
   }, [])
 
-    const sendNotification = (message, isError) => {
+  const sendNotification = (message, isError) => {
     setNotifMessage(message)
     setIsError(isError)
     setTimeout(() => {
@@ -36,6 +36,16 @@ const App = () => {
     }, 5000)
   }
 
+  const blogFormRef = useRef()
+
+  const addBlog = (newBlog) => {
+    blogFormRef.current.toggleVisibility()
+    blogService
+      .create(newBlog)
+      .then(returnedBlog  => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
+  }
 
   if (user === null) {
     return (
@@ -52,9 +62,9 @@ const App = () => {
       <h2>Blogs</h2>
       <Notification message={notifMessage} isError={isError}/>
       <LoggedInStatus user={user} setUser={setUser}/>
-      <Togglable buttonLabel="new blog">
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <h3>Create new blog</h3>
-        <NewBlogForm user={user} blogs={blogs} setBlogs={setBlogs} sendNotification={sendNotification}/>
+        <NewBlogForm user={user} createBlog={addBlog} sendNotification={sendNotification}/>
       </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />

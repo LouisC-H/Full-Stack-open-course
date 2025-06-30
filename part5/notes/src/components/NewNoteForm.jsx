@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import noteService from '../services/notesDb'
 
 const NewNoteForm = ({createNote}) => {
   const [newNote, setNewNote] = useState('')
