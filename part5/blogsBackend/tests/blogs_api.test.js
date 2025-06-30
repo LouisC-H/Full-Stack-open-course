@@ -176,9 +176,10 @@ describe('Pre-populated blog database', () => {
       })
     })
   })
+
   describe('PUT - update an existing blog', () => {
     describe('Happy path', () => {
-      test('Transform an existing blog into a new one, step by step', async () => {
+      test.only('Transform an existing blog into a new one', async () => {
 
         const blogsAtStart = await helper.blogsInDb()
         const blogToReplace = blogsAtStart[0]
@@ -186,28 +187,32 @@ describe('Pre-populated blog database', () => {
         await api
           .put(`/api/blogs/${blogToReplace.id}`)
           .send(blogsData.newBlog)
+          .set('Authorization', `Bearer ${this.bearerToken}`)
           .expect(200)
           .expect('Content-Type', /application\/json/)
 
-        const blogsAfterPost = await helper.blogsInDb()
-        assert.strictEqual(blogsAfterPost.length, blogsData.initialBlogs.length)
+        const blogsAfterPut = await helper.blogsInDb()
+        assert.strictEqual(blogsAfterPut.length, blogsData.initialBlogs.length)
 
         // Also check that the contents has made it into the new collection of saved blogs, and that the old contents is gone
-        const titles = blogsAfterPost.map(n => n.title)
+        const titles = blogsAfterPut.map(n => n.title)
         assert(titles.includes(blogsData.newBlog.title))
         assert(!titles.includes(blogToReplace.title))
 
-        const authors = blogsAfterPost.map(n => n.author)
+        const authors = blogsAfterPut.map(n => n.author)
         assert(authors.includes(blogsData.newBlog.author))
-        assert(!titles.includes(blogToReplace.author))
+        assert(!authors.includes(blogToReplace.author))
 
-        const urls = blogsAfterPost.map(n => n.url)
+        const urls = blogsAfterPut.map(n => n.url)
         assert(urls.includes(blogsData.newBlog.url))
-        assert(!titles.includes(blogToReplace.url))
+        assert(!urls.includes(blogToReplace.url))
 
-        const likes = blogsAfterPost.map(n => n.likes)
+        const likes = blogsAfterPut.map(n => n.likes)
         assert(likes.includes(blogsData.newBlog.likes))
-        assert(!titles.includes(blogToReplace.likes))
+        assert(!likes.includes(blogToReplace.likes))
+
+        const user = blogsAfterPut.map(n => n.user)
+        assert(user[0] !== blogToReplace.user)
       })
     })
   })
