@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [seeMore, setSeeMore] = useState(false)
 
   const blogStyle = {
@@ -26,6 +26,11 @@ const Blog = ({ blog, updateBlog }) => {
     })
   }
 
+  const deleteClicked = () => {
+    event.preventDefault()
+    deleteBlog(blog)
+  }
+
   const VMLabel = seeMore
   ? 'hide' : 'view'
 
@@ -48,6 +53,9 @@ const Blog = ({ blog, updateBlog }) => {
           <button onClick={addLike}>like</button>
         </div>
         <div>{blog.user.name}</div>
+        <div>
+          <button onClick={deleteClicked}>remove</button>
+        </div>
       </div>
       )
     }

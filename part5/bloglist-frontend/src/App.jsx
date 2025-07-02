@@ -17,9 +17,7 @@ const App = () => {
   // Pass all methods that update the blogs list to this function
   const updateBlogs = (blogs) => {
     // Sort the blogs by likes in descending order
-    console.log('blogs : ', blogs);
     blogs.sort((a, b) => b.likes - a.likes)
-    console.log('blogs : ', blogs);
     setBlogs( blogs )
   }
 
@@ -77,7 +75,20 @@ const App = () => {
     } else {
       return blog
     }
-  
+  }
+
+  const deleteBlog = async (blog) => {
+    if (window.confirm(`Remove ${blog.title} ${blog.author} ?`)) {
+      try {
+        await blogService.remove(blog.id)
+        // Create a new list of blogs, removing the deleted one, then save it to the page's state
+        const newBlogsList = blogs.filter(listItem => listItem.id !== blog.id)
+        updateBlogs(newBlogsList)
+        sendNotification(`Blog ${blog.title} by ${blog.author} removed`, false)
+      } catch (error) {
+        sendNotification(`Error removing blog: ${error.response.data.error}`, true)
+      }
+    }
   }
 
   if (user === null) {
@@ -100,7 +111,8 @@ const App = () => {
         <NewBlogForm user={user} createBlog={addBlog} sendNotification={sendNotification}/>
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} />
+        // <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>
       )}
     </div>
   )
