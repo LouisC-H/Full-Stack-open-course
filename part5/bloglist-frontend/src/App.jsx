@@ -14,6 +14,15 @@ const App = () => {
   const [notifMessage, setNotifMessage] = useState(null)
   const [isError, setIsError] = useState(false)
 
+  // Pass all methods that update the blogs list to this function
+  const updateBlogs = (blogs) => {
+    // Sort the blogs by likes in descending order
+    console.log('blogs : ', blogs);
+    blogs.sort((a, b) => b.likes - a.likes)
+    console.log('blogs : ', blogs);
+    setBlogs( blogs )
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       updateBlogs( blogs )
@@ -28,13 +37,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  // Pass all methods that update the blogs list to this function
-  const updateBlogs = (blogs) => {
-    // Sort the blogs by likes in descending order
-    blogs.sort((a, b) => b.likes - a.likes)
-    setBlogs( blogs )
-  }
 
   const sendNotification = (message, isError) => {
     setNotifMessage(message)
