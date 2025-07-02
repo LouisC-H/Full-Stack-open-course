@@ -16,7 +16,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      updateBlogs( blogs )
     )  
   }, [])
 
@@ -28,6 +28,13 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  // Pass all methods that update the blogs list to this function
+  const updateBlogs = (blogs) => {
+    // Sort the blogs by likes in descending order
+    blogs.sort((a, b) => b.likes - a.likes)
+    setBlogs( blogs )
+  }
 
   const sendNotification = (message, isError) => {
     setNotifMessage(message)
@@ -43,7 +50,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     const createdBlog = await blogService.create(newBlog)
     const populatedBlog = await populateUser(createdBlog)
-    setBlogs(blogs.concat(populatedBlog))
+    updateBlogs(blogs.concat(populatedBlog))
   }
 
   const updateBlog = async (id, newBlog) => {
@@ -56,7 +63,7 @@ const App = () => {
     const newNewBlogsList = blogs.map( blog => blog.id === id ? 
       populatedBlog :
       blog)
-    setBlogs(newNewBlogsList)
+    updateBlogs(newNewBlogsList)
   }
 
   const populateUser = async (blog) => {
