@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import Conditional from './Conditional'
 
-const Blog = ({ blog, updateBlog, deleteBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [seeMore, setSeeMore] = useState(false)
 
   const blogStyle = {
@@ -31,6 +32,8 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
     deleteBlog(blog)
   }
 
+  const sameUser = blog.user.name == user.name && blog.user.username == user.username
+
   const VMLabel = seeMore
   ? 'hide' : 'view'
 
@@ -53,9 +56,9 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
           <button onClick={addLike}>like</button>
         </div>
         <div>{blog.user.name}</div>
-        <div>
+        <Conditional boolean={sameUser}>
           <button onClick={deleteClicked}>remove</button>
-        </div>
+        </Conditional>
       </div>
       )
     }
