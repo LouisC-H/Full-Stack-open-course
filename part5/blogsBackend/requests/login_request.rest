@@ -3,15 +3,15 @@
 POST http://localhost:3003/api/login
 Content-Type: application/json
 
-# {
-#     "username": "hellas",
-#     "password": "awwHellas"
-# }
-
 {
-    "username": "rootSuperUser",
-    "password": "somethingExtremelySecure"
+    "username": "hellas",
+    "password": "awwHellas"
 }
+
+# {
+#     "username": "rootSuperUser",
+#     "password": "somethingExtremelySecure"
+# }
 
 
 ###### SAD PATH

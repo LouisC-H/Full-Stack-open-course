@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogService'
+import userService from './services/userService'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import LoggedInStatus from './components/LoggedInStatus'
@@ -38,23 +39,36 @@ const App = () => {
 
   const blogFormRef = useRef()
 
-  const addBlog = (newBlog) => {
+  const addBlog = async (newBlog) => {
     blogFormRef.current.toggleVisibility()
-    blogService
-      .create(newBlog)
-      .then(returnedBlog  => {
-        setBlogs(blogs.concat(returnedBlog))
-      })
+    const createdBlog = await blogService.create(newBlog)
+    const populatedBlog = await populateUser(createdBlog)
+    setBlogs(blogs.concat(populatedBlog))
   }
 
-    const updateBlog = (id, newBlog) => {
-    blogFormRef.current.toggleVisibility()
-    console.log('id, newBlog : ', id, newBlog);
-    blogService
-      .update(id, newBlog)
-      .then(returnedBlog  => {
-        setBlogs(blogs.map( blog => blog.id === id ? returnedBlog : blog))
-      })
+  const updateBlog = async (id, newBlog) => {
+    // Send the updated blog to the backend via PUT request
+    const returnedBlog = await blogService.update(id, newBlog)
+    // Insert the fully populated user into the blog
+    // This is necessary because blog object is returned with just the user ID
+    const populatedBlog = await populateUser(returnedBlog)
+    // Create a new list of blogs, swapping in the updated one, then save it to the page's state
+    const newNewBlogsList = blogs.map( blog => blog.id === id ? 
+      populatedBlog :
+      blog)
+    setBlogs(newNewBlogsList)
+  }
+
+  const populateUser = async (blog) => {
+    // If the blog has a user but it's only an ID rather than a populated object, fetch the user details
+    if (blog.user && !blog.user.name) {
+      const returnedUser = await userService.getUser(blog.user)
+      blog.user = returnedUser
+      return blog
+    } else {
+      return blog
+    }
+  
   }
 
   if (user === null) {

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import loginService from '../services/loginService'
+import blogService from '../services/blogService'
 
 const LoginForm = ({setUser, sendNotification}) => {
   const [username, setUsername] = useState('')
@@ -15,6 +16,7 @@ const LoginForm = ({setUser, sendNotification}) => {
         'loggedInBlogsAppUser', JSON.stringify(user)
       ) 
       setUser(user)
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
     } catch (exception) {

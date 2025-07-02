@@ -24,12 +24,12 @@ describe('Pre-populated blog database', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(blogsData.initialBlogs)
+    await new Promise(resolve => setTimeout(resolve, 500))
     const response = await api
       .post('/api/login')
       .send(userData.iUserLogin)
     this.bearerToken = response.body.token
     // Note: timeout is probably overkill, but I found that the tests could randomly fail if the tests were running too quickly one after the other
-    await new Promise(resolve => setTimeout(resolve, 500))
   })
 
   describe('GET all blogs', () => {
@@ -179,7 +179,7 @@ describe('Pre-populated blog database', () => {
 
   describe('PUT - update an existing blog', () => {
     describe('Happy path', () => {
-      test.only('Transform an existing blog into a new one', async () => {
+      test('Transform an existing blog into a new one', async () => {
 
         const blogsAtStart = await helper.blogsInDb()
         const blogToReplace = blogsAtStart[0]

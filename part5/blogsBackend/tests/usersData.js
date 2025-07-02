@@ -4,6 +4,12 @@ const initialUser = {
   password: 'examplePassword'
 }
 
+const initialUser2 = {
+  username: 'experimentSuperUser',
+  name: 'Experiment User',
+  password: 'suggestionPassword'
+}
+
 const iUserLogin = {
   username: 'testSuperUser',
   password: 'examplePassword'
@@ -33,5 +39,5 @@ const smallPasswordUser = {
 }
 
 module.exports = {
-  initialUser, iUserLogin, validUser, sameUsernameUser, smallUsernameUser, smallPasswordUser
+  initialUser, initialUser2, iUserLogin, validUser, sameUsernameUser, smallUsernameUser, smallPasswordUser
 }

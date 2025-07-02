@@ -1,4 +1,8 @@
+### GET all users
 GET http://localhost:3003/api/users
+
+### GET a specific user
+GET http://localhost:3003/api/users/681379cf38dba894d74b8399
 
 ### Post a user
 POST http://localhost:3003/api/users 
