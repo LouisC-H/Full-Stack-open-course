@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Conditional from './Conditional'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [seeMore, setSeeMore] = useState(false)
@@ -19,12 +20,12 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
     updateBlog(
       blog.id,
       {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user,
-    })
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes + 1,
+        user: blog.user,
+      })
   }
 
   const deleteClicked = () => {
@@ -32,10 +33,10 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
     deleteBlog(blog)
   }
 
-  const sameUser = blog.user.name == user.name && blog.user.username == user.username
+  const sameUser = blog.user.name === user.name && blog.user.username === user.username
 
   const VMLabel = seeMore
-  ? 'hide' : 'view'
+    ? 'hide' : 'view'
 
   if (!seeMore) {
     return (
@@ -44,7 +45,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
         <button onClick={toggleViewMore}>{VMLabel}</button>
       </div>
     )} else {
-      return (
+    return (
       <div style={blogStyle}>
         <div>
           {blog.title} {blog.author}
@@ -60,8 +61,15 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
           <button onClick={deleteClicked}>remove</button>
         </Conditional>
       </div>
-      )
-    }
+    )
+  }
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  updateBlog: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 }
 
 export default Blog

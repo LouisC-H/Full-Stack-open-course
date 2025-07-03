@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import loginService from '../services/loginService'
 import blogService from '../services/blogService'
+import PropTypes from 'prop-types'
 
-const LoginForm = ({setUser, sendNotification}) => {
+const LoginForm = ({ setUser, sendNotification }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -14,21 +15,21 @@ const LoginForm = ({setUser, sendNotification}) => {
       })
       window.localStorage.setItem(
         'loggedInBlogsAppUser', JSON.stringify(user)
-      ) 
+      )
       setUser(user)
       blogService.setToken(user.token)
       setUsername('')
       setPassword('')
     } catch (exception) {
       sendNotification('Wrong credentials', true)
-    }    
+    }
   }
 
   return (
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -37,7 +38,7 @@ const LoginForm = ({setUser, sendNotification}) => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -45,8 +46,13 @@ const LoginForm = ({setUser, sendNotification}) => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
+}
+
+LoginForm.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  sendNotification: PropTypes.func.isRequired
 }
 
 export default LoginForm

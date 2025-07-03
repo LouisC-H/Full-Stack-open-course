@@ -7,9 +7,9 @@ export default [
   {
     files: ['**/*.js'],
     languageOptions: {
-      sourceType: 'commonjs',
       globals: { ...globals.node },
       ecmaVersion: 'latest',
+      sourceType: 'module' ,
     },
     plugins: { 
       '@stylistic/js': stylisticJs,
@@ -23,10 +23,9 @@ export default [
       'no-trailing-spaces': 'error',
       'object-curly-spacing': ['error', 'always'],
       'arrow-spacing': ['error', { before: true, after: true }],
-      'no-console': 'off',
     }, 
   },
   {
-    ignores: ['dist/**','requests/**'],
+    ignores: ['node_modules', 'dist', '.eslintrc.cjs', 'vite.config.js'],
   },
 ]

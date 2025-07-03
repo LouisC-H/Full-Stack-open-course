@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       updateBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const App = () => {
     // This is necessary because blog object is returned with just the user ID
     const populatedBlog = await populateUser(returnedBlog)
     // Create a new list of blogs, swapping in the updated one, then save it to the page's state
-    const newNewBlogsList = blogs.map( blog => blog.id === id ? 
+    const newNewBlogsList = blogs.map( blog => blog.id === id ?
       populatedBlog :
       blog)
     updateBlogs(newNewBlogsList)
