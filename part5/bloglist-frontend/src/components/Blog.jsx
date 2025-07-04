@@ -40,23 +40,23 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   if (!seeMore) {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} className="baseInfo">
         {blog.title} {blog.author}
         <button onClick={toggleViewMore}>{VMLabel}</button>
       </div>
     )} else {
     return (
       <div style={blogStyle}>
-        <div>
+        <div className="baseInfo">
           {blog.title} {blog.author}
           <button onClick={toggleViewMore}>{VMLabel}</button>
         </div>
-        <div>{blog.url}</div>
-        <div>
+        <div className="url">{blog.url}</div>
+        <div className="likes">
           Likes: {blog.likes}
           <button onClick={addLike}>like</button>
         </div>
-        <div>{blog.user.name}</div>
+        <div className="username">{blog.user.name}</div>
         <Conditional boolean={sameUser}>
           <button onClick={deleteClicked}>remove</button>
         </Conditional>
