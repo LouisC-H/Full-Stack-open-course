@@ -63,7 +63,6 @@ describe('Note app', () => {
       })
 
       test('importance can be changed', async ({ page }) => {
-        await page.pause()
         const secondNoteElement = await page.getByText('second note').locator('..')
 
         await secondNoteElement
