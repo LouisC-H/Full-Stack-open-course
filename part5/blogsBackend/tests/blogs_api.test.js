@@ -62,6 +62,8 @@ describe('Pre-populated blog database', () => {
           .expect(201)
           .expect('Content-Type', /application\/json/)
 
+        await new Promise(resolve => setTimeout(resolve, 100))
+
         const blogsAfterPost = await helper.blogsInDb()
         assert.strictEqual(blogsAfterPost.length, blogsData.initialBlogs.length + 1)
 
@@ -219,5 +221,6 @@ describe('Pre-populated blog database', () => {
 })
 
 after(async () => {
+  await Blog.deleteMany({})
   await mongoose.connection.close()
 })

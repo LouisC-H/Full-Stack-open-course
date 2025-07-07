@@ -11,8 +11,8 @@
     "testOnly": "npm test -- --test-only",
     "lint": "eslint .",
     "build:ui": "rd /s /q dist && cd ../../part5/bloglist-frontend && npm run build && Xcopy /S /I /E dist ..\\..\\part5\\blogsBackend\\dist",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
-  
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "start:test": "cross-env NODE_ENV=test node index.js"  
   },
   "author": "Louis Clement-Harris",
   "license": "MIT",

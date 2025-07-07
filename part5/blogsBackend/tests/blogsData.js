@@ -13,34 +13,34 @@ const initialBlogs = [
     likes: 5,
     user: '68628f6eaef7e4b6f9594954'
   },
-  {
-    title: 'Canonical string reduction',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-    likes: 12,
-    user: '68628f6eaef7e4b6f9594954'
-  },
-  {
-    title: 'First class tests',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
-    likes: 10,
-    user: '68628f6eaef7e4b6f9594954'
-  },
-  {
-    title: 'TDD harms architecture',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
-    likes: 10,
-    user: '68628f6eaef7e4b6f9594954'
-  },
-  {
-    title: 'Type wars',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-    likes: 2,
-    user: '68628f6eaef7e4b6f9594954'
-  }
+  // {
+  //   title: 'Canonical string reduction',
+  //   author: 'Edsger W. Dijkstra',
+  //   url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+  //   likes: 12,
+  //   user: '68628f6eaef7e4b6f9594954'
+  // },
+  // {
+  //   title: 'First class tests',
+  //   author: 'Robert C. Martin',
+  //   url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+  //   likes: 10,
+  //   user: '68628f6eaef7e4b6f9594954'
+  // },
+  // {
+  //   title: 'TDD harms architecture',
+  //   author: 'Robert C. Martin',
+  //   url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+  //   likes: 10,
+  //   user: '68628f6eaef7e4b6f9594954'
+  // },
+  // {
+  //   title: 'Type wars',
+  //   author: 'Robert C. Martin',
+  //   url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
+  //   likes: 2,
+  //   user: '68628f6eaef7e4b6f9594954'
+  // }
 ]
 
 const newBlog = {

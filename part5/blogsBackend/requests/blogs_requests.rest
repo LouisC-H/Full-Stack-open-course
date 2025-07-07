@@ -25,3 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb
     "url": "My local VScode",
     "likes": 12
 }
+
+### Delete
+DELETE http://localhost:3003/api/blogs/6865307f88ee8f8f15753f2d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RTdXBlclVzZXIiLCJpZCI6IjY4NjUzMDc5NzYwZmIzMTUyYzIyMDdlYiIsImlhdCI6MTc1MTg4OTg4MSwiZXhwIjoxNzUxODkzNDgxfQ.17OHT8d5i3JNWq1DmMEffkXV1PxGAwpr5gR46TB8hfI

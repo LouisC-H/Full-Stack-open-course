@@ -16,6 +16,7 @@ describe('Pre-populated DB', () => {
     await User.deleteMany({})
     await api.post('/api/users').send(userData.initialUser)
     await api.post('/api/users').send(userData.initialUser2)
+    await new Promise(resolve => setTimeout(resolve, 50))
   })
 
   describe('GET all users', () => {
