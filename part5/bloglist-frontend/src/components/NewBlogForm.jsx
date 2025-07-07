@@ -31,7 +31,7 @@ const NewBlogForm = ({ user, createBlog, sendNotification }) => {
         <input
           value={title}
           onChange={handleTitleChange}
-          id="titleInput"
+          data-testid="titleInput"
         />
       </p>
       <p>
@@ -39,7 +39,7 @@ const NewBlogForm = ({ user, createBlog, sendNotification }) => {
         <input
           value={author}
           onChange={handleAuthorChange}
-          id="authorInput"
+          data-testid="authorInput"
         />
       </p>
       <p>
@@ -47,7 +47,7 @@ const NewBlogForm = ({ user, createBlog, sendNotification }) => {
         <input
           value={url}
           onChange={handleURLChange}
-          id="urlInput"
+          data-testid="urlInput"
         />
       </p>
       <p>

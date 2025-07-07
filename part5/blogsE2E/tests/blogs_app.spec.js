@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith } = require('./helper')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -36,6 +36,31 @@ describe('Blog app', () => {
     await expect(errorDiv).toHaveCSS('color', 'rgb(255, 0, 0)')
 
     await expect(page.getByText('Matti Luukkainen logged in')).not.toBeVisible()
+    })
+  })
+
+  describe('When logged in', () => {
+  beforeEach(async ({ page }) => {
+    await loginWith(page, 'mluukkai', 'salainen')
+  })
+
+  test('a new blog can be created', async ({ page }) => {
+    await createBlog(page, 'A new blog', 'Author Name', 'https://example.com')
+  })
+
+    describe('And several blogs exist', () => {
+      beforeEach(async ({ page }) => {
+        await createBlog(page, 'A new blog', 'Author Name', 'https://example.com')
+        await createBlog(page, 'Another blog', 'Another Author', 'https://another-example.com')
+        await createBlog(page, 'Third blog', 'Third Author', 'https://third-example.com')
+      })
+
+      test('a blog can be liked', async ({ page }) => {
+        const secondBlog = await page.getByText('Another blog Another Author').locator('..')
+        await secondBlog.getByRole('button').click()
+        await secondBlog.getByRole('button', { name: 'like' }).click()
+        await expect(secondBlog.getByText('Likes: 1')).toBeVisible()
+      })
     })
   })
 })
