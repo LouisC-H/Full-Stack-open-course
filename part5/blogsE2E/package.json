@@ -6,7 +6,7 @@
     "test": "playwright test",
     "testOne": "npm test -- --project firefox",
     "testUI": "npm test -- --ui",
-    "testTrace": "npm run test -- --trace on",
+    "test:trace": "npm run test -- --trace on",
     "test:report": "playwright show-report",
     "test:debug" :  "npx playwright test --project=firefox --debug"
   },
