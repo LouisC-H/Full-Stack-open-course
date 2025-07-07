@@ -13,4 +13,9 @@ const createBlog = async (page, title, author, url) => {
   await page.getByText(title + " " + author).waitFor()
 }
 
-export { loginWith, createBlog }
+const reLoginWith = async (page, username, password)  => {
+  await page.getByRole('button', { name: 'logout' }).click()
+  await loginWith(page, username, password)
+}
+
+export { loginWith, createBlog, reLoginWith }
