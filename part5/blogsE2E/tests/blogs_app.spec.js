@@ -1,5 +1,5 @@
 const { test, expect, beforeEach, describe } = require('@playwright/test')
-const { loginWith, createBlog, reLoginWith } = require('./helper')
+const { loginWith, createBlog, increaseLikesBy } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -78,11 +78,32 @@ describe('Blog app', () => {
       })
 
       test("a different user cannot see a blog's delete button", async ({ page }) => {
-        await reLoginWith(page, 'LouisCH', 'LovesPlatypuses')
+        await loginWith(page, 'LouisCH', 'LovesPlatypuses')
         const secondBlog = await page.getByText('Another blog Another Author').locator('..')
         page.on('dialog', dialog => dialog.accept());
         await secondBlog.getByRole('button').click()
         await expect(secondBlog.getByRole('button', { name: 'remove' })).not.toBeVisible()
+      })
+
+      test("blogs are arranged in order of likes, the blog with the most likes first", async ({ page }) => {
+        const firstBlog = await page.getByText('A new blog Author Name').locator('..')
+        const secondBlog = await page.getByText('Another blog Another Author').locator('..')
+        const thirdBlog = await page.getByText('Third blog Third Author').locator('..')
+        
+        const blogList = page.getByTestId('blog')
+        await expect(blogList).toHaveCount(3)
+        
+        await increaseLikesBy(thirdBlog, 1)
+        await expect(blogList.nth(0)).toContainText('Third blog Third Author')
+
+        await increaseLikesBy(secondBlog, 2)
+        await expect(blogList.nth(0)).toContainText('Another blog Another Author')
+        await expect(blogList.nth(1)).toContainText('Third blog Third Author')
+
+        await increaseLikesBy(firstBlog, 3)
+        await expect(blogList.nth(0)).toContainText('A new blog Author Name')
+        await expect(blogList.nth(1)).toContainText('Another blog Another Author')
+        await expect(blogList.nth(2)).toContainText('Third blog Third Author')
       })
     })
   })

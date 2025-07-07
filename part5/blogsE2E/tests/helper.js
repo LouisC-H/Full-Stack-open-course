@@ -1,4 +1,8 @@
 const loginWith = async (page, username, password)  => {
+  const logoutButton = page.getByRole('button', { name: 'logout' })
+  if (await logoutButton.isVisible()) {
+    await logoutButton.click()
+  }
   await page.getByTestId('username').fill(username)
   await page.getByTestId('password').fill(password)
   await page.getByRole('button', { name: 'login' }).click()
@@ -13,9 +17,16 @@ const createBlog = async (page, title, author, url) => {
   await page.getByText(title + " " + author).waitFor()
 }
 
-const reLoginWith = async (page, username, password)  => {
-  await page.getByRole('button', { name: 'logout' }).click()
-  await loginWith(page, username, password)
+const increaseLikesBy = async (blog, numLikes)  => {
+  const viewButton = blog.getByRole('button', { name: 'view' })
+  if (await viewButton.isVisible()) {
+    await viewButton.click()
+  }
+  const likeButton = blog.getByRole('button', { name: 'like' })
+  for (let i = 0; i < numLikes; i++) {
+    await likeButton.click()
+    await new Promise(resolve => setTimeout(resolve, 100))
+  }
 }
 
-export { loginWith, createBlog, reLoginWith }
+export { loginWith, createBlog, increaseLikesBy }

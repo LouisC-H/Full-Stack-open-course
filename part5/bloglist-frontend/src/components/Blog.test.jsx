@@ -27,23 +27,23 @@ describe('<Blog />', () => {
 
     mockUpdateBlogHandler = vi.fn()
     mockDeleteBlogHandler = vi.fn()
-    
+
     container = render(
       <Blog blog={blog} updateBlog={mockUpdateBlogHandler} deleteBlog={mockDeleteBlogHandler} user={user} />
     ).container
   })
 
   test('At start, only base content is rendered', () => {
-  
-    const baseInfoDiv = container.querySelector(".baseInfo")
+
+    const baseInfoDiv = container.querySelector('.baseInfo')
     expect(baseInfoDiv).not.toBeNull()
     screen.getByText ('Testing Blog', { exact: false })
     screen.getByText ('Testing Master', { exact: false })
     screen.getByText ('view')
 
-    const urlDiv = container.querySelector(".url")
-    const likesDiv = container.querySelector(".likes")
-    const usernameDiv = container.querySelector(".username")
+    const urlDiv = container.querySelector('.url')
+    const likesDiv = container.querySelector('.likes')
+    const usernameDiv = container.querySelector('.username')
     expect(urlDiv).toBeNull()
     expect(likesDiv).toBeNull()
     expect(usernameDiv).toBeNull()
@@ -53,22 +53,22 @@ describe('<Blog />', () => {
     const user = userEvent.setup()
     const button = screen.getByText('view')
     await user.click(button)
-  
-    const baseInfoDiv = container.querySelector(".baseInfo")
+
+    const baseInfoDiv = container.querySelector('.baseInfo')
     expect(baseInfoDiv).not.toBeNull()
     screen.getByText ('Testing Blog', { exact: false })
     screen.getByText ('Testing Master', { exact: false })
     screen.getByText ('hide')
 
-    const urlDiv = container.querySelector(".url")
+    const urlDiv = container.querySelector('.url')
     expect(urlDiv).not.toBeNull()
     screen.getByText ('https://testing.com')
 
-    const likesDiv = container.querySelector(".likes")
+    const likesDiv = container.querySelector('.likes')
     expect(likesDiv).not.toBeNull()
     screen.getByText ('Likes: 0')
 
-    const usernameDiv = container.querySelector(".username")
+    const usernameDiv = container.querySelector('.username')
     expect(usernameDiv).not.toBeNull()
     screen.getByText ('Test User')
   })

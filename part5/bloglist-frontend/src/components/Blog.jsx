@@ -40,7 +40,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   if (!seeMore) {
     return (
-      <div style={blogStyle} className="baseInfo">
+      <div style={blogStyle} data-testid='blog'>
         <div className="baseInfo">
           {blog.title} {blog.author}
           <button onClick={toggleViewMore}>{VMLabel}</button>
@@ -48,7 +48,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
       </div>
     )} else {
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} data-testid='blog'>
         <div className="baseInfo">
           {blog.title} {blog.author}
           <button onClick={toggleViewMore}>{VMLabel}</button>
