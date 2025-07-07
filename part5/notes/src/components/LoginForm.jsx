@@ -36,9 +36,8 @@ const LoginForm = ({setUser, setErrorMessage}) => {
         <div>
           username
             <input
-            type="text"
+            data-testid='username'
             value={username}
-            name="Username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
@@ -46,8 +45,8 @@ const LoginForm = ({setUser, setErrorMessage}) => {
           password
             <input
             type="password"
+            data-testid='password'
             value={password}
-            name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
