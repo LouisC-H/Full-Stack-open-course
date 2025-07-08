@@ -17,34 +17,41 @@ const asObject = (anecdote) => {
   }
 }
 
-const anecdoteSorter = (anecdoteList) => {
-  console.log('anecdoteList : ', anecdoteList);
-  console.log('anecdoteList.sort((a, b) => b.votes - a.votes) : ', anecdoteList.sort((a, b) => b.votes - a.votes));
-  return anecdoteList.sort((a, b) => b.votes - a.votes)
-}
-
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
-  // console.log('state now: ', state)
-  // console.log('action', action)
+  console.log('state now: ', state)
+  console.log('action', action)
   switch(action.type) {
-    case 'NEW_NOTE': {
-      const newNotesList = [...state, action.data]
-      return anecdoteSorter(newNotesList)}
+    case 'NEW_ANECDOTE': {
+      return [...state, action.data]}
     case 'ADD_VOTE': {
+      console.log('action.data.id : ', action.data.id);
       const id = action.data.id
-      const noteToAdd = state.find(n => n.id === id)
-      const addedNote = { 
-        ...noteToAdd, 
-        votes: noteToAdd.votes + 1
+      const anecdoteToAdd = state.find(n => n.id === id)
+      const addedAnecdote = { 
+        ...anecdoteToAdd, 
+        votes: anecdoteToAdd.votes + 1
       }
-      const newNotesList = state.map( note =>
-        note.id !== id ? note : addedNote 
-      )
-      return anecdoteSorter(newNotesList)}
+      return state.map( anecdote =>
+        anecdote.id !== id ? anecdote : addedAnecdote 
+      )}
     default:
       return state
+  }
+}
+
+export const voteAnecdote = (id) => {
+  return {
+    type: 'ADD_VOTE',
+    data: { id: id }
+  }
+}
+
+export const createAnecdote = (content) => {
+  return {
+    type: 'NEW_ANECDOTE',
+    data: asObject(content)
   }
 }
 

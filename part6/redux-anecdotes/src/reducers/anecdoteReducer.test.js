@@ -51,35 +51,35 @@ describe('anecdoteReducer', () => {
       })
   })
 
-  test('check that anecdotes are sorted by votes', () => {
-    const state = [
-      {
-        content: 'First anecdote',
-        id: 1,
-        votes: 1
-      }, {
-        content: 'Second anecdote',
-        id: 2,
-        votes: 2
-      }, {
-        content: 'Third anecdote',
-        id: 3,
-        votes: 3
-      }]
+  // test('check that anecdotes are sorted by votes', () => {
+  //   const state = [
+  //     {
+  //       content: 'First anecdote',
+  //       id: 1,
+  //       votes: 1
+  //     }, {
+  //       content: 'Second anecdote',
+  //       id: 2,
+  //       votes: 2
+  //     }, {
+  //       content: 'Third anecdote',
+  //       id: 3,
+  //       votes: 3
+  //     }]
 
-    const action = {
-      type: 'ADD_VOTE',
-      data: {
-        id: 2
-      }
-    }
+  //   const action = {
+  //     type: 'ADD_VOTE',
+  //     data: {
+  //       id: 2
+  //     }
+  //   }
 
-    deepFreeze(state)
-    // Add two votes to the second anecdote
-    const newState = anecdoteReducer(anecdoteReducer(state, action), action)
-    // Now votes should be 1, 4, 3, so order goes Second, Third, First once sorted
-    expect(newState[0].id).toBe(2)  
-    expect(newState[1].id).toBe(3)
-    expect(newState[2].id).toBe(1)
-  })
+  //   deepFreeze(state)
+  //   // Add two votes to the second anecdote
+  //   const newState = anecdoteReducer(anecdoteReducer(state, action), action)
+  //   // Now votes should be 1, 4, 3, so order goes Second, Third, First once sorted
+  //   expect(newState[0].id).toBe(2)  
+  //   expect(newState[1].id).toBe(3)
+  //   expect(newState[2].id).toBe(1)
+  // })
 })
