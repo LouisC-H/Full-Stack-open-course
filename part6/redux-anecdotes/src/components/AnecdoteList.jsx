@@ -20,18 +20,31 @@ const AnecdoteList = () => {
   const anecdoteSorter = (anecdoteList) => {
     return anecdoteList.sort((a, b) => b.votes - a.votes)
   }
-  const anecdotes = anecdoteSorter(useSelector(state => state))
 
-  return (
-    <div>
-      {anecdotes.map(anecdote =>
-        <Anecdote
-          anecdote={anecdote}
-          handleClick={() => dispatch(voteAnecdote(anecdote.id))}
-        />
-      )}
-    </div>
-  )
+  const anecdotes = useSelector(state => {
+    // Filter anecdotes based on the current filter state
+    return state.anecdotes.filter(anecdote =>
+      anecdote.content.toLowerCase().includes(state.filter.toLowerCase())
+    )
+  })
+
+  if (anecdotes) {
+    const sortedAnecdotes = anecdoteSorter(anecdotes)
+
+    return (
+      <div>
+        {sortedAnecdotes.map(anecdote =>
+          <Anecdote
+            key={anecdote.id}
+            anecdote={anecdote}
+            handleClick={() => dispatch(voteAnecdote(anecdote.id))}
+          />
+        )}
+      </div>
+    )
+  }
+
+
 }
 
 export default AnecdoteList
