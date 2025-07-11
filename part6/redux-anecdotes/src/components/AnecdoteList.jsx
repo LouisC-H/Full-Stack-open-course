@@ -40,10 +40,7 @@ const AnecdoteList = () => {
             anecdote={anecdote}
             handleClick={() => {
               dispatch(voteNote(anecdote.id))
-              dispatch(setNotification(`Vote added to: "${anecdote.content}"`))
-              setTimeout(() => {
-                dispatch(removeNotification(`Vote added to: "${anecdote.content}"`))
-              }, 5000)
+              dispatch(setNotification(`Vote added to: "${anecdote.content}"`, 2))
             }}
           />
         )}
