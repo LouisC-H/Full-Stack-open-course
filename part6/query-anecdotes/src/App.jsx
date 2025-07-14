@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
-import { getNotes } from '../requests/requests'
+import { getAnecdotes } from '../requests/requests'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
@@ -9,7 +9,7 @@ const App = () => {
 
   const anecdotes = useQuery({
     queryKey: ['anecdotes'],
-    queryFn: getNotes,
+    queryFn: getAnecdotes,
     retry: 1
   })
   console.log(JSON.parse(JSON.stringify(anecdotes)))
