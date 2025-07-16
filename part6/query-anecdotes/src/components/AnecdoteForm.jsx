@@ -11,13 +11,21 @@ const AnecdoteForm = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
     },
+    onError: () => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: `anecdote too shot, must have a length of 5 characters or more`})
+    setTimeout(() => dispatch({
+      type: 'REMOVE_NOTIFICATION',
+      payload: `anecdote too shot, must have a length of 5 characters or more`})
+      , 5000)
+    },
   })
 
   const onCreate = (event) => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({ content, votes: 0 })
     // Presumably Could be made more efficient with slices/helper functions, but the exercise 
     // wanted useReducer hooks and context to be used
     dispatch({
@@ -27,6 +35,7 @@ const AnecdoteForm = () => {
       type: 'REMOVE_NOTIFICATION',
       payload: `anecdote '${content}' added`})
       , 5000)
+    newAnecdoteMutation.mutate({ content, votes: 0 })
 }
 
   return (
