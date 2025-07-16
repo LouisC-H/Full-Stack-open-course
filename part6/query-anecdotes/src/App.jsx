@@ -3,9 +3,11 @@ import { getAnecdotes, updateAnecdote } from '../requests/requests'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
+import { useNotificationDispatch } from './contexts/NotificationContext'
 
 const App = () => {
   const queryClient = useQueryClient()
+  const dispatch = useNotificationDispatch()
 
   const anecdotes = useQuery({
     queryKey: ['anecdotes'],
@@ -30,6 +32,15 @@ const App = () => {
 
   const handleVote = (anecdote) => {
     updateAnecdoteMutation.mutate({...anecdote, votes: anecdote.votes += 1 })
+    // Presumably Could be made more efficient with slices/helper functions, but the exercise 
+    // wanted useReducer hooks and context to be used
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      payload: `anecdote '${anecdote.content}' voted on`})
+    setTimeout(() => dispatch({
+      type: 'REMOVE_NOTIFICATION',
+      payload: `anecdote '${anecdote.content}' voted on`})
+      , 5000)
   }
 
   return (
