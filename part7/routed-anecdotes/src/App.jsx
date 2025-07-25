@@ -72,16 +72,22 @@ const CreateNew = (props) => {
   const info = useField('text')
   const navigate = useNavigate()
 
-
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content : content.value,
-      author: author.value,
-      info: info.value,
+      content : content.fieldProps.value,
+      author: author.fieldProps.value,
+      info: info.fieldProps.value,
       votes: 0
     })
     navigate('/')
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -90,18 +96,19 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...content.fieldProps} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author.fieldProps} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info.fieldProps} />
         </div>
-        <button>create</button>
+        <button >create</button>
       </form>
+      <button onClick={handleReset}>reset</button>
     </div>
   )
 
@@ -126,7 +133,7 @@ const App = () => {
   ])
   const [notification, setNotification] = useState('')
 
-  const displayNotificaiton = (notification, duration) => {
+  const displayNotification = (notification, duration) => {
     setNotification(notification)
     setTimeout(() => {
       setNotification('')
@@ -135,7 +142,7 @@ const App = () => {
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
-    displayNotificaiton(`a new anecdote "${anecdote.content}" created!`, 5)
+    displayNotification(`a new anecdote "${anecdote.content}" created!`, 5)
     setAnecdotes(anecdotes.concat(anecdote))
   }
 
