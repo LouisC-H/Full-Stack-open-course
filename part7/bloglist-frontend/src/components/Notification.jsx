@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 const Notification = ({ message, isError }) => {
   const notificationStyle = {
@@ -21,28 +22,25 @@ const Notification = ({ message, isError }) => {
     marginBottom: 10,
   };
 
-  if (message === null) {
+  const notification = useSelector(state => state.notification)
+
+  if (!notification) {
     return null;
   }
 
-  if (isError) {
+  if (notification.isError) {
     return (
       <div className="error" style={errorStyle}>
-        {message}
+        {notification.message}
       </div>
     );
   }
 
   return (
     <div className="notification" style={notificationStyle}>
-      {message}
+      {notification.message}
     </div>
   );
-};
-
-Notification.propTypes = {
-  message: PropTypes.string,
-  isError: PropTypes.bool.isRequired,
 };
 
 export default Notification;

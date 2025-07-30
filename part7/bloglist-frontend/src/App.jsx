@@ -8,11 +8,13 @@ import LoggedInStatus from "./components/LoggedInStatus";
 import NewBlogForm from "./components/NewBlogForm";
 import Togglable from "./components/Togglable";
 
+import { useDispatch } from "react-redux";
+import { setNotification } from "./reducers/notificationReducer";
+
 const App = () => {
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [notifMessage, setNotifMessage] = useState(null);
-  const [isError, setIsError] = useState(false);
 
   // Pass all methods that update the blogs list to this function
   const updateBlogs = (blogs) => {
@@ -35,11 +37,8 @@ const App = () => {
   }, []);
 
   const sendNotification = (message, isError) => {
-    setNotifMessage(message);
-    setIsError(isError);
-    setTimeout(() => {
-      setNotifMessage(null);
-    }, 5000);
+    console.log("sending notification: ", message, isError);
+    dispatch(setNotification(message, isError, 5));
   };
 
   const blogFormRef = useRef();
@@ -98,7 +97,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={notifMessage} isError={isError} />
+        <Notification/>
         <LoginForm setUser={setUser} sendNotification={sendNotification} />
       </div>
     );
@@ -107,7 +106,7 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
-      <Notification message={notifMessage} isError={isError} />
+      <Notification/>
       <LoggedInStatus user={user} setUser={setUser} />
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <h3>Create new blog</h3>
