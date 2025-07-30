@@ -36,11 +36,6 @@ const App = () => {
     }
   }, []);
 
-  const sendNotification = (message, isError) => {
-    console.log("sending notification: ", message, isError);
-    dispatch(setNotification(message, isError, 5));
-  };
-
   const blogFormRef = useRef();
 
   const addBlog = async (newBlog) => {
@@ -83,12 +78,9 @@ const App = () => {
           (listItem) => listItem.id !== blog.id,
         );
         updateBlogs(newBlogsList);
-        sendNotification(`Blog ${blog.title} by ${blog.author} removed`, false);
+        dispatch(setNotification(`Blog ${blog.title} by ${blog.author} removed`, false, 5));
       } catch (error) {
-        sendNotification(
-          `Error removing blog: ${error.response.data.error}`,
-          true,
-        );
+        dispatch(setNotification(`Error removing blog: ${error.response.data.error}`, true, 5));
       }
     }
   };
@@ -98,7 +90,7 @@ const App = () => {
       <div>
         <h2>Log in to application</h2>
         <Notification/>
-        <LoginForm setUser={setUser} sendNotification={sendNotification} />
+        <LoginForm setUser={setUser} />
       </div>
     );
   }
@@ -113,7 +105,6 @@ const App = () => {
         <NewBlogForm
           user={user}
           createBlog={addBlog}
-          sendNotification={sendNotification}
         />
       </Togglable>
       {blogs.map((blog) => (

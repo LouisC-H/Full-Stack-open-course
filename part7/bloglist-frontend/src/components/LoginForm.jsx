@@ -1,9 +1,11 @@
 import { useState } from "react";
 import loginService from "../services/loginService";
 import blogService from "../services/blogService";
-import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 
-const LoginForm = ({ setUser, sendNotification }) => {
+const LoginForm = ({ setUser }) => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,7 +22,7 @@ const LoginForm = ({ setUser, sendNotification }) => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      sendNotification("Wrong credentials", true);
+      dispatch(setNotification("Wrong credentials", true, 5));
     }
   };
 
@@ -46,11 +48,6 @@ const LoginForm = ({ setUser, sendNotification }) => {
       <button type="submit">login</button>
     </form>
   );
-};
-
-LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  sendNotification: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
