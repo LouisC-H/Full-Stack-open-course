@@ -1,17 +1,17 @@
 const initialBlogs = [
   {
-    title: 'React patterns',
-    author: 'Michael Chan',
-    url: 'https://reactpatterns.com/',
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
     likes: 7,
-    user: '68628f6eaef7e4b6f9594954'
+    user: "68628f6eaef7e4b6f9594954",
   },
   {
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    title: "Go To Statement Considered Harmful",
+    author: "Edsger W. Dijkstra",
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     likes: 5,
-    user: '68628f6eaef7e4b6f9594954'
+    user: "68628f6eaef7e4b6f9594954",
   },
   // {
   //   title: 'Canonical string reduction',
@@ -41,34 +41,38 @@ const initialBlogs = [
   //   likes: 2,
   //   user: '68628f6eaef7e4b6f9594954'
   // }
-]
+];
 
 const newBlog = {
-  title: 'Turns out people still make blogs?',
-  author: 'Sir Prized',
-  url: 'http://aintthatcrazy.html',
+  title: "Turns out people still make blogs?",
+  author: "Sir Prized",
+  url: "http://aintthatcrazy.html",
   likes: 999,
-  user: '68628f6eaef7e4b6f9594951'
-}
+  user: "68628f6eaef7e4b6f9594951",
+};
 
 const noTitle = {
-  author: 'Sir Prized',
-  url: 'http://aintthatcrazy.html',
-  likes: 999
-}
+  author: "Sir Prized",
+  url: "http://aintthatcrazy.html",
+  likes: 999,
+};
 
 const noURL = {
-  title: 'Turns out people still make blogs?',
-  author: 'Sir Prized',
-  likes: 999
-}
+  title: "Turns out people still make blogs?",
+  author: "Sir Prized",
+  likes: 999,
+};
 
 const noLikes = {
-  title: 'Turns out people still make blogs?',
-  author: 'Sir Prized',
-  url: 'http://aintthatcrazy.html'
-}
+  title: "Turns out people still make blogs?",
+  author: "Sir Prized",
+  url: "http://aintthatcrazy.html",
+};
 
 module.exports = {
-  initialBlogs, newBlog, noTitle, noURL, noLikes
-}
+  initialBlogs,
+  newBlog,
+  noTitle,
+  noURL,
+  noLikes,
+};

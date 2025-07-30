@@ -1,119 +1,123 @@
 const dummy = () => {
-  return 1
-}
+  return 1;
+};
 
 const totalLikes = (blogs) => {
   const reducer = (sum, blog) => {
-    return sum + blog.likes
-  }
+    return sum + blog.likes;
+  };
 
-  return blogs.reduce(reducer, 0)
-}
+  return blogs.reduce(reducer, 0);
+};
 
 const favouriteBlog = (blogs) => {
   const reducer = (currentFav, blog) => {
     if (!currentFav.likes || currentFav.likes < blog.likes) {
-      return blog
+      return blog;
     } else {
-      return currentFav
+      return currentFav;
     }
-  }
+  };
 
-  return blogs.reduce(reducer, {})
-}
+  return blogs.reduce(reducer, {});
+};
 
 const mostBlogs = (blogs) => {
   // Find a list of all the authors
   const findAuthorsReducer = (authorsList, blog) => {
     if (!authorsList.includes(blog.author)) {
-      authorsList.push(blog.author)
+      authorsList.push(blog.author);
     }
-    return authorsList
-  }
-  var authorsList = blogs.reduce(findAuthorsReducer, [])
+    return authorsList;
+  };
+  var authorsList = blogs.reduce(findAuthorsReducer, []);
   // Find which one is biggest
-  const [biggestAuthorName, biggestAuthorBlogNum] = findBiggestAuthor(authorsList, blogs)
+  const [biggestAuthorName, biggestAuthorBlogNum] = findBiggestAuthor(
+    authorsList,
+    blogs,
+  );
   // Return the details in the requested format
   const biggestAuthorDetails = {
     author: biggestAuthorName,
-    blogs: biggestAuthorBlogNum
-  }
-  return biggestAuthorDetails
-}
+    blogs: biggestAuthorBlogNum,
+  };
+  return biggestAuthorDetails;
+};
 
 const mostLikes = (blogs) => {
   // Find a list of all the authors
   const findAuthorsReducer = (authorsList, blog) => {
     if (!authorsList.includes(blog.author)) {
-      authorsList.push(blog.author)
+      authorsList.push(blog.author);
     }
-    return authorsList
-  }
-  var authorsList = blogs.reduce(findAuthorsReducer, [])
+    return authorsList;
+  };
+  var authorsList = blogs.reduce(findAuthorsReducer, []);
   // Find which one is the most liked
-  const [biggestAuthorName, mostAuthorLikesNumNum] = findMostLikedAuthor(authorsList, blogs)
+  const [biggestAuthorName, mostAuthorLikesNumNum] = findMostLikedAuthor(
+    authorsList,
+    blogs,
+  );
   // Return the details in the requested format
   const biggestAuthorDetails = {
     author: biggestAuthorName,
-    likes: mostAuthorLikesNumNum
-  }
-  return biggestAuthorDetails
-}
+    likes: mostAuthorLikesNumNum,
+  };
+  return biggestAuthorDetails;
+};
 
 const findBiggestAuthor = (authorsList, blogs) => {
-  var biggestAuthorBlogNum = -1
-  var biggestAuthorName = 'N/A - no blogs found'
+  var biggestAuthorBlogNum = -1;
+  var biggestAuthorName = "N/A - no blogs found";
   // For each author
   for (let authorIndex = 0; authorIndex < authorsList.length; authorIndex++) {
-    const authorName = authorsList[authorIndex]
+    const authorName = authorsList[authorIndex];
 
     // Count how many of the blogs are in their name
     const numBlogsByAuthorReducer = (blogsPerAuthor, blog) => {
       if (blog.author === authorName) {
-        blogsPerAuthor++
+        blogsPerAuthor++;
       }
-      return blogsPerAuthor
-    }
-    const authorBlogNum = blogs.reduce(numBlogsByAuthorReducer, 0)
+      return blogsPerAuthor;
+    };
+    const authorBlogNum = blogs.reduce(numBlogsByAuthorReducer, 0);
     // If that number is more than the pevious record, save the author's details
-    if (authorBlogNum > biggestAuthorBlogNum){
-      biggestAuthorBlogNum = authorBlogNum
-      biggestAuthorName = authorName
+    if (authorBlogNum > biggestAuthorBlogNum) {
+      biggestAuthorBlogNum = authorBlogNum;
+      biggestAuthorName = authorName;
     }
-
   }
-  return [biggestAuthorName, biggestAuthorBlogNum]
-}
+  return [biggestAuthorName, biggestAuthorBlogNum];
+};
 
 const findMostLikedAuthor = (authorsList, blogs) => {
-  var biggestAuthorLikesNum = 0
-  var biggestAuthorName = 'N/A - no blogs found'
+  var biggestAuthorLikesNum = 0;
+  var biggestAuthorName = "N/A - no blogs found";
   // For each author
   for (let authorIndex = 0; authorIndex < authorsList.length; authorIndex++) {
-    const authorName = authorsList[authorIndex]
+    const authorName = authorsList[authorIndex];
 
     // Count how many of the blogs are in their name
     const numBlogsByAuthorReducer = (likesPerAuthor, blog) => {
       if (blog.author === authorName) {
-        likesPerAuthor += blog.likes
+        likesPerAuthor += blog.likes;
       }
-      return likesPerAuthor
-    }
-    const authorBlogNum = blogs.reduce(numBlogsByAuthorReducer, 0)
+      return likesPerAuthor;
+    };
+    const authorBlogNum = blogs.reduce(numBlogsByAuthorReducer, 0);
     // If that number is more than the pevious record, save the author's details
-    if (authorBlogNum > biggestAuthorLikesNum){
-      biggestAuthorLikesNum = authorBlogNum
-      biggestAuthorName = authorName
+    if (authorBlogNum > biggestAuthorLikesNum) {
+      biggestAuthorLikesNum = authorBlogNum;
+      biggestAuthorName = authorName;
     }
-
   }
-  return [biggestAuthorName, biggestAuthorLikesNum]
-}
+  return [biggestAuthorName, biggestAuthorLikesNum];
+};
 
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
   mostBlogs,
-  mostLikes
-}
+  mostLikes,
+};
