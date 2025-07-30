@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import Conditional from "./Conditional";
 import PropTypes from "prop-types";
+import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch()
   const [seeMore, setSeeMore] = useState(false);
 
   const blogStyle = {
@@ -19,18 +22,12 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   const addLike = () => {
     event.preventDefault();
-    updateBlog(blog.id, {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user,
-    });
+    dispatch(likeBlog(blog))
   };
 
   const deleteClicked = () => {
     event.preventDefault();
-    deleteBlog(blog);
+    dispatch(deleteBlog(blog));
   };
 
   const sameUser =
@@ -70,8 +67,6 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  updateBlog: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
 
