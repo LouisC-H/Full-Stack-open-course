@@ -1,22 +1,22 @@
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import { logUserOut } from "../reducers/userReducer";
 
-const LoggedInStatus = ({ user, setUser }) => {
+const LoggedInStatus = () => {
+  const dispatch = useDispatch()
+  const userSelector = useSelector(state => state.user);
+
   const handleLogout = () => {
     window.localStorage.removeItem("loggedInBlogsAppUser");
-    setUser(null);
+    dispatch(logUserOut());
   };
 
   return (
     <p>
-      {user.name} logged-in
+      {userSelector.user.name} logged-in
       <button onClick={() => handleLogout()}>logout</button>
     </p>
   );
-};
-
-LoggedInStatus.propTypes = {
-  user: PropTypes.object.isRequired,
-  setUser: PropTypes.func.isRequired,
 };
 
 export default LoggedInStatus;

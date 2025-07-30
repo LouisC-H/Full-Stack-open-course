@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Conditional from "./Conditional";
 import PropTypes from "prop-types";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const dispatch = useDispatch()
+  const userSelector = useSelector(state => state.user);
   const [seeMore, setSeeMore] = useState(false);
 
   const blogStyle = {
@@ -31,7 +32,7 @@ const Blog = ({ blog, user }) => {
   };
 
   const sameUser =
-    blog.user.name === user.name && blog.user.username === user.username;
+    blog.user.name === userSelector.user.name && blog.user.username === userSelector.user.username;
 
   const VMLabel = seeMore ? "hide" : "view";
 
@@ -67,7 +68,6 @@ const Blog = ({ blog, user }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
 };
 
 export default Blog;

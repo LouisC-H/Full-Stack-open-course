@@ -3,8 +3,9 @@ import loginService from "../services/loginService";
 import blogService from "../services/blogService";
 import { useDispatch } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
+import { logUserIn } from "../reducers/userReducer";
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = () => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,8 +18,7 @@ const LoginForm = ({ setUser }) => {
         password,
       });
       window.localStorage.setItem("loggedInBlogsAppUser", JSON.stringify(user));
-      setUser(user);
-      blogService.setToken(user.token);
+      dispatch(logUserIn(user));
       setUsername("");
       setPassword("");
     } catch (exception) {
