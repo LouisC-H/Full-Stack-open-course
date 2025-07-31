@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { initialiseBlogs } from "./reducers/blogReducer";
 import { logUserIn } from "./reducers/userReducer";
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useMatch } from 'react-router-dom'
 
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import LoggedInStatus from "./components/LoggedInStatus";
 import MainPage from "./components/MainPage";
 import Users from "./components/Users";
+import UserDetails from "./components/UserDetails";
 
 const App = () => {
   const dispatch = useDispatch()
@@ -22,10 +23,13 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInBlogsAppUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      dispatch(logUserIn(user));
+      const loggedInUser = JSON.parse(loggedUserJSON);
+      dispatch(logUserIn(loggedInUser));
     }
   }, []);
+
+  const userURLMatch = useMatch('/users/:id')
+  // const blogURLMatch = useMatch('/users/:id')
 
   if (!userSelector) {
     return (
@@ -37,6 +41,14 @@ const App = () => {
     );
   }
 
+  let user = userURLMatch
+    ? userSelector.userList.find(user => user.id === userURLMatch.params.id)
+    : null
+
+  // let blog = blogURLMatch
+  //   ? blogsSelector.find(blog => blog.id === blogURLMatch.params.id)
+  //   : null
+
   return (
     <div>
       <h2>Blogs</h2>
@@ -45,6 +57,8 @@ const App = () => {
       <Routes>
         <Route  path="/" element={<MainPage/>}/>
         <Route  path="/users" element={<Users/>}/>
+        <Route  path="/users/:id" element={<UserDetails user={user}/>}/>
+        {/* <Route  path="/blogs/:id" element={<UserDetails user={user}/>}/> */}
       </Routes>
     </div>
   );

@@ -1,26 +1,18 @@
 import { useEffect, useState } from "react";
 import userService from "../services/userService";
+import { Link } from 'react-router-dom'
+import { useSelector } from "react-redux";
 
 const SingleUserRow = ({ user }) => (
   <tr>
+    <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
     <td>{user.name}</td>
     <td>{user.blogs.length}</td>
   </tr>
 )
 
-
 const Users = () => {
-  const [userList, setUserList] = useState(false);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const userList = await userService.getAllUsers()
-      setUserList(userList);
-    }
-    getUsers();
-  }, [])
-
-  console.log('userList : ', userList);
+  const userList = useSelector(state => state.user.userList);
 
   if (userList) {
     return (
