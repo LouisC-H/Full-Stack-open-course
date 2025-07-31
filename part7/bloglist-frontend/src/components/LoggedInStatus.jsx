@@ -12,10 +12,12 @@ const LoggedInStatus = () => {
   };
 
   return (
-    <p>
-      {userSelector.user.name} logged-in
+    <div>
+      <p>
+        {userSelector.user.name} logged-in
+      </p>
       <button onClick={() => handleLogout()}>logout</button>
-    </p>
+    </div>
   );
 };
 

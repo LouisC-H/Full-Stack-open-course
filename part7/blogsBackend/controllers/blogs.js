@@ -33,19 +33,21 @@ blogsRouter.post("", middleware.userExtractor, async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
-  response.status(201).json(savedBlog);
+  const returnedBlog = await Blog.findById(savedBlog._id).populate("user", { username: 1, name: 1 });
+
+  response.status(201).json(returnedBlog);
 });
 
-blogsRouter.delete(
-  "/:id",
-  middleware.userExtractor,
-  async (request, response) => {
+blogsRouter.delete( "/:id", middleware.userExtractor, async (request, response) => {
+    // const user = request.user
+    console.log('request : ', request.params);
+
     try {
       // Look for the blog to delete.
       const blogToDelete = await Blog.findById(request.params.id);
 
       // If it can be found, check that the logged in user is the same as the creator of the blog. If not, they don't have permission to delete it.
-      if (blogToDelete.user.toString() !== request.user.toString()) {
+      if (blogToDelete.user.toString() !== user.toString()) {
         return response
           .status(401)
           .json({ error: "invalid permissions - blog not created by user" });
@@ -56,6 +58,8 @@ blogsRouter.delete(
     }
 
     await Blog.findByIdAndDelete(request.params.id);
+    // user.blogs = user.blogs.filter(b => b._id.toString() !== request.params.id.toString())
+    // await user.save()
     response.status(204).end();
   },
 );
