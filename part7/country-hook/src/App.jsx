@@ -19,11 +19,8 @@ const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
   useEffect( () => {
-    console.log('name : ', name);
     if (name) {
-      console.log(`fetching country data for ${name}`)
       const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/'
-      console.log(baseUrl + 'api/name/' + name)
       axios.get(baseUrl + 'api/name/' + name)
         .then(response => {
           const countryData = response.data
@@ -40,8 +37,6 @@ const Country = ({ country }) => {
   if (!country) {
     return null
   }
-
-  console.log('country : ', country);
 
   if (!country.found) {
     return (

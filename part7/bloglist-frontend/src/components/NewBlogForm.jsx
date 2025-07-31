@@ -29,7 +29,6 @@ const NewBlogForm = () => {
       url: url,
       user: userSelector.user,
     }));
-    dispatch(setNotification(`New blog "${title}" added.`, false, 5));
     setTitle("");
     setAuthor("");
     setURL("");

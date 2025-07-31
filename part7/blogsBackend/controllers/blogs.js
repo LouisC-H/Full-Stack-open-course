@@ -39,8 +39,6 @@ blogsRouter.post("", middleware.userExtractor, async (request, response) => {
 });
 
 blogsRouter.delete( "/:id", middleware.userExtractor, async (request, response) => {
-    console.log('request user: ', request.user);
-
     try {
       // Look for the blog to delete.
       const blogToDelete = await Blog.findById(request.params.id);

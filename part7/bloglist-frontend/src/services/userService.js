@@ -8,7 +8,6 @@ const getUser = async (id) => {
 
 const getAllUsers = async () => {
   const request = await axios.get(baseUrl);
-  console.log('request : ', request);
   return request.data;
 }
 
