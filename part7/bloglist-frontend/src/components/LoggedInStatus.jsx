@@ -13,9 +13,7 @@ const LoggedInStatus = () => {
 
   return (
     <div>
-      <p>
-        {userSelector.user.name} logged-in
-      </p>
+      {userSelector.user.name} logged-in
       <button onClick={() => handleLogout()}>logout</button>
     </div>
   );
