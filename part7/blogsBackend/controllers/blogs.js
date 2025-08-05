@@ -9,12 +9,15 @@ blogsRouter.get("", async (request, response) => {
 });
 
 blogsRouter.get("/:id", async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate("user", { username: 1, name: 1 });
+  const blog = await Blog.findById(request.params.id).populate("user", {
+    username: 1,
+    name: 1,
+  });
   if (blog) {
-      response.json(blog)
-    } else {
-      response.status(404).end()
-    }
+    response.json(blog);
+  } else {
+    response.status(404).end();
+  }
 });
 
 blogsRouter.post("", middleware.userExtractor, async (request, response) => {
@@ -34,26 +37,40 @@ blogsRouter.post("", middleware.userExtractor, async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
-  const returnedBlog = await Blog.findById(savedBlog._id).populate("user", { username: 1, name: 1 });
+  const returnedBlog = await Blog.findById(savedBlog._id).populate("user", {
+    username: 1,
+    name: 1,
+  });
 
   response.status(201).json(returnedBlog);
 });
 
 // Post a comment
-blogsRouter.post("/:id/comments", middleware.userExtractor, async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
-  const comment = request.body.comment;
+blogsRouter.post(
+  "/:id/comments",
+  middleware.userExtractor,
+  async (request, response) => {
+    const blog = await Blog.findById(request.params.id);
+    const comment = request.body.comment;
 
-  const newBlog = {
-    ...blog,
-    comments: blog.comments.push(comment),
-  };
+    const newBlog = {
+      ...blog,
+      comments: blog.comments.push(comment),
+    };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, newBlog, { new: true });
-  response.status(201).json(updatedBlog);
-});
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      request.params.id,
+      newBlog,
+      { new: true },
+    );
+    response.status(201).json(updatedBlog);
+  },
+);
 
-blogsRouter.delete( "/:id", middleware.userExtractor, async (request, response) => {
+blogsRouter.delete(
+  "/:id",
+  middleware.userExtractor,
+  async (request, response) => {
     try {
       // Look for the blog to delete.
       const blogToDelete = await Blog.findById(request.params.id);
@@ -72,8 +89,10 @@ blogsRouter.delete( "/:id", middleware.userExtractor, async (request, response) 
     await Blog.findByIdAndDelete(request.params.id);
 
     const user = await User.findById(request.user);
-    user.blogs = user.blogs.filter(b => b._id.toString() !== request.params.id.toString())
-    await user.save()
+    user.blogs = user.blogs.filter(
+      (b) => b._id.toString() !== request.params.id.toString(),
+    );
+    await user.save();
     response.status(204).end();
   },
 );
