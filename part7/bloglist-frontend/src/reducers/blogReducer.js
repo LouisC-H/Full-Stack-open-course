@@ -1,108 +1,155 @@
-import { createSlice, current } from '@reduxjs/toolkit'
-import blogService from '../services/blogService'
+import { createSlice, current } from "@reduxjs/toolkit";
+import blogService from "../services/blogService";
 import { setNotification } from "../reducers/notificationReducer";
 
 const blogSlice = createSlice({
-  name: 'blogs',
+  name: "blogs",
   initialState: [],
   reducers: {
     appendBlog(state, action) {
-      state.push(action.payload)
+      state.push(action.payload);
     },
     addLike(state, action) {
-      const id = action.payload
-      const blogToModify = state.find(n => n.id === id)
-      const newBlog = { 
-        ...blogToModify, 
-        likes: blogToModify.likes + 1
-      }
-      return sortBlogs(state.map( anecdote =>
-        anecdote.id !== id ? anecdote : newBlog 
-      ))
+      const id = action.payload;
+      const blogToModify = state.find((n) => n.id === id);
+      const newBlog = {
+        ...blogToModify,
+        likes: blogToModify.likes + 1,
+      };
+      return sortBlogs(
+        state.map((anecdote) => (anecdote.id !== id ? anecdote : newBlog)),
+      );
     },
     addComment(state, action) {
-      const id = action.payload.id
-      const comment = action.payload.comment
-      const blogToModify = state.find(n => n.id === id)
+      const id = action.payload.id;
+      const comment = action.payload.comment;
+      const blogToModify = state.find((n) => n.id === id);
       const newBlog = {
         ...blogToModify,
         comments: blogToModify.comments.concat(comment),
       };
-      return sortBlogs(state.map( anecdote =>
-        anecdote.id !== id ? anecdote : newBlog 
-      ))
+      return sortBlogs(
+        state.map((anecdote) => (anecdote.id !== id ? anecdote : newBlog)),
+      );
     },
     setBlogs(state, action) {
-      return sortBlogs(action.payload)
+      return sortBlogs(action.payload);
     },
     removeBlog(state, action) {
-      const id = action.payload
-      return state.filter(blog => blog.id !== id)
-    }
-  }
-})
+      const id = action.payload;
+      return state.filter((blog) => blog.id !== id);
+    },
+  },
+});
 
-export const { appendBlog, addLike, setBlogs, removeBlog, addComment } = blogSlice.actions
+export const { appendBlog, addLike, setBlogs, removeBlog, addComment } =
+  blogSlice.actions;
 
-export const initialiseBlogs = () => {    
-  return async dispatch => {
-    const initialisedBlogs = await blogService.getAll()
-    dispatch(setBlogs(initialisedBlogs))
-  }}
+export const initialiseBlogs = () => {
+  return async (dispatch) => {
+    const initialisedBlogs = await blogService.getAll();
+    dispatch(setBlogs(initialisedBlogs));
+  };
+};
 
-export const createBlog = content => {
-  return async dispatch => {
+export const createBlog = (content) => {
+  return async (dispatch) => {
     try {
-        const newBlog = await blogService.create(content)
-        dispatch(setNotification(`Blog ${newBlog.title} by ${newBlog.author} has been created`, false, 5));
-        dispatch(appendBlog(newBlog))
-      } catch (error) {
-        dispatch(setNotification(`Error creating blog: ${error.response.data.error}`, true, 5));
-      }
-  }}
+      const newBlog = await blogService.create(content);
+      dispatch(
+        setNotification(
+          `Blog ${newBlog.title} by ${newBlog.author} has been created`,
+          false,
+          5,
+        ),
+      );
+      dispatch(appendBlog(newBlog));
+    } catch (error) {
+      dispatch(
+        setNotification(
+          `Error creating blog: ${error.response.data.error}`,
+          true,
+          5,
+        ),
+      );
+    }
+  };
+};
 
 export const postComment = (comment, id) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-        await blogService.postComment(comment, id)
-        dispatch(setNotification(`Comment "${comment}" has been added`, false, 5));
-        dispatch(addComment({comment, id}))
-      } catch (error) {
-        console.log('error : ', error);
-        dispatch(setNotification(`Error sending comment: ${error.response.data.error}`, true, 5));
-      }
-  }}
+      await blogService.postComment(comment, id);
+      dispatch(
+        setNotification(`Comment "${comment}" has been added`, false, 5),
+      );
+      dispatch(addComment({ comment, id }));
+    } catch (error) {
+      console.log("error : ", error);
+      dispatch(
+        setNotification(
+          `Error sending comment: ${error.response.data.error}`,
+          true,
+          5,
+        ),
+      );
+    }
+  };
+};
 
-export const likeBlog = blog => {
-  return async dispatch => {
+export const likeBlog = (blog) => {
+  return async (dispatch) => {
     try {
-        await blogService.incrementLikes(blog.id)
-        dispatch(setNotification(`Blog ${blog.title} by ${blog.author} has been liked`, false, 5));
-        dispatch(addLike(blog.id))  
-      } catch (error) {
-        dispatch(setNotification(`Error liking blog: ${error.response.data.error}`, true, 5));
-      }
-  }
-}
+      await blogService.incrementLikes(blog.id);
+      dispatch(
+        setNotification(
+          `Blog ${blog.title} by ${blog.author} has been liked`,
+          false,
+          5,
+        ),
+      );
+      dispatch(addLike(blog.id));
+    } catch (error) {
+      dispatch(
+        setNotification(
+          `Error liking blog: ${error.response.data.error}`,
+          true,
+          5,
+        ),
+      );
+    }
+  };
+};
 
-export const deleteBlog = blog => {
+export const deleteBlog = (blog) => {
   if (window.confirm(`Remove ${blog.title} ${blog.author} ?`)) {
-    return async dispatch => {
+    return async (dispatch) => {
       try {
-        await blogService.remove(blog.id)
-        dispatch(removeBlog(blog.id))
-        dispatch(setNotification(`Blog ${blog.title} by ${blog.author} removed`, false, 5));
+        await blogService.remove(blog.id);
+        dispatch(removeBlog(blog.id));
+        dispatch(
+          setNotification(
+            `Blog ${blog.title} by ${blog.author} removed`,
+            false,
+            5,
+          ),
+        );
       } catch (error) {
-        dispatch(setNotification(`Error removing blog: ${error.response.data.error}`, true, 5));
+        dispatch(
+          setNotification(
+            `Error removing blog: ${error.response.data.error}`,
+            true,
+            5,
+          ),
+        );
       }
-      
-    }  
+    };
   }
-}
+};
 
 const sortBlogs = (blogsList) => {
   // Sort the blogs by likes in descending order
   return blogsList.sort((a, b) => b.likes - a.likes);
 };
 
-export default blogSlice.reducer
+export default blogSlice.reducer;

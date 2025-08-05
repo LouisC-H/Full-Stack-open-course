@@ -21,7 +21,7 @@ const Notification = ({ message, isError }) => {
     marginBottom: 10,
   };
 
-  const notification = useSelector(state => state.notification)
+  const notification = useSelector((state) => state.notification);
 
   if (!notification) {
     return null;

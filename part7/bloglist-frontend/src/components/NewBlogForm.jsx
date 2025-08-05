@@ -5,8 +5,8 @@ import { setNotification } from "../reducers/notificationReducer";
 import { createBlog } from "../reducers/blogReducer";
 
 const NewBlogForm = () => {
-  const dispatch = useDispatch()
-  const userSelector = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const userSelector = useSelector((state) => state.user);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setURL] = useState("");
@@ -23,12 +23,14 @@ const NewBlogForm = () => {
 
   const addBlog = (event) => {
     event.preventDefault();
-    dispatch(createBlog({
-      title: title,
-      author: author,
-      url: url,
-      user: userSelector.user,
-    }));
+    dispatch(
+      createBlog({
+        title: title,
+        author: author,
+        url: url,
+        user: userSelector.user,
+      }),
+    );
     setTitle("");
     setAuthor("");
     setURL("");

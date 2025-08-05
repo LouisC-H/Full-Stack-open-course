@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import userService from "../services/userService";
 
-const UserDetails = ({user}) => {
-
+const UserDetails = ({ user }) => {
   return (
     <div>
       <h2>{user.name}</h2>
@@ -13,7 +12,7 @@ const UserDetails = ({user}) => {
         ))}
       </ul>
     </div>
-  )
-}
+  );
+};
 
 export default UserDetails;

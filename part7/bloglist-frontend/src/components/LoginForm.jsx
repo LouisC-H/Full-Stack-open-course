@@ -6,7 +6,7 @@ import { setNotification } from "../reducers/notificationReducer";
 import { logUserIn } from "../reducers/userReducer";
 
 const LoginForm = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 

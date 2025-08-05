@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logUserOut } from "../reducers/userReducer";
 
 const LoggedInStatus = () => {
-  const dispatch = useDispatch()
-  const userSelector = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const userSelector = useSelector((state) => state.user);
 
   const handleLogout = () => {
     window.localStorage.removeItem("loggedInBlogsAppUser");

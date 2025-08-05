@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { postComment } from "../reducers/blogReducer";
 
 const Comments = ({ commentsList, blogID }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [protoComment, setProtoComment] = useState("");
 
   const handlePCommentChange = (event) => {
@@ -14,9 +14,9 @@ const Comments = ({ commentsList, blogID }) => {
     event.preventDefault();
     dispatch(postComment(protoComment, blogID));
     setProtoComment("");
-  }
+  };
 
-    if (commentsList.length === 0) {
+  if (commentsList.length === 0) {
     commentsList = ["No comments yet"];
   }
 
@@ -24,10 +24,11 @@ const Comments = ({ commentsList, blogID }) => {
     <div>
       <h3>Comments</h3>
       <form onSubmit={sendComment}>
-        <input 
-        value={protoComment} 
-        onChange={handlePCommentChange}
-        id="commentInput"></input>
+        <input
+          value={protoComment}
+          onChange={handlePCommentChange}
+          id="commentInput"
+        ></input>
         <button type="submit">add comment</button>
       </form>
       {commentsList.map((comment) => (
