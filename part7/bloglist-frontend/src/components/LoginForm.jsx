@@ -17,7 +17,6 @@ const LoginForm = () => {
         username,
         password,
       });
-      console.log('user : ', user);
       window.localStorage.setItem("loggedInBlogsAppUser", JSON.stringify(user));
       dispatch(logUserIn(user));
       setUsername("");

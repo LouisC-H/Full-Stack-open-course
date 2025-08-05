@@ -11,11 +11,23 @@ const blogSlice = createSlice({
     },
     addLike(state, action) {
       const id = action.payload
-      const blogToAdd = state.find(n => n.id === id)
+      const blogToModify = state.find(n => n.id === id)
       const newBlog = { 
-        ...blogToAdd, 
-        likes: blogToAdd.likes + 1
+        ...blogToModify, 
+        likes: blogToModify.likes + 1
       }
+      return sortBlogs(state.map( anecdote =>
+        anecdote.id !== id ? anecdote : newBlog 
+      ))
+    },
+    addComment(state, action) {
+      const id = action.payload.id
+      const comment = action.payload.comment
+      const blogToModify = state.find(n => n.id === id)
+      const newBlog = {
+        ...blogToModify,
+        comments: blogToModify.comments.concat(comment),
+      };
       return sortBlogs(state.map( anecdote =>
         anecdote.id !== id ? anecdote : newBlog 
       ))
@@ -30,7 +42,7 @@ const blogSlice = createSlice({
   }
 })
 
-export const { appendBlog, addLike, setBlogs, removeBlog } = blogSlice.actions
+export const { appendBlog, addLike, setBlogs, removeBlog, addComment } = blogSlice.actions
 
 export const initialiseBlogs = () => {    
   return async dispatch => {
@@ -46,6 +58,18 @@ export const createBlog = content => {
         dispatch(appendBlog(newBlog))
       } catch (error) {
         dispatch(setNotification(`Error creating blog: ${error.response.data.error}`, true, 5));
+      }
+  }}
+
+export const postComment = (comment, id) => {
+  return async dispatch => {
+    try {
+        await blogService.postComment(comment, id)
+        dispatch(setNotification(`Comment "${comment}" has been added`, false, 5));
+        dispatch(addComment({comment, id}))
+      } catch (error) {
+        console.log('error : ', error);
+        dispatch(setNotification(`Error sending comment: ${error.response.data.error}`, true, 5));
       }
   }}
 

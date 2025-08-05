@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 import userService from "../services/userService";
 import Conditional from "./Conditional";
+import Comments from "./Comments";
 
 const BlogDetails = ({blog}) => {
   const dispatch = useDispatch()
@@ -36,6 +37,7 @@ const BlogDetails = ({blog}) => {
       <Conditional boolean={sameUser}>
         <button onClick={deleteBlog}>remove</button>
       </Conditional>
+      <Comments commentsList={blog.comments} blogID={blog.id} />
     </div>
   )
 }
