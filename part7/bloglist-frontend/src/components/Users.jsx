@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import userService from "../services/userService";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Table } from "react-bootstrap";
 
 const SingleUserRow = ({ user }) => (
   <tr>
@@ -20,7 +21,7 @@ const Users = () => {
     return (
       <div>
         <h2>Users</h2>
-        <table>
+        <Table striped>
           <thead>
             <tr>
               <th></th>
@@ -34,7 +35,7 @@ const Users = () => {
               <SingleUserRow key={user.id} user={user} />
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     );
   }

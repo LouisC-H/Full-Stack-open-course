@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { logUserOut } from "../reducers/userReducer";
+import { Button } from "react-bootstrap";
 
 const LoggedInStatus = () => {
   const dispatch = useDispatch();
@@ -12,9 +13,16 @@ const LoggedInStatus = () => {
   };
 
   return (
-    <div>
+    <div style={{ marginLeft: "5px" }}>
       {userSelector.user.name} logged-in
-      <button onClick={() => handleLogout()}>logout</button>
+      <Button
+        style={{ marginLeft: "16px" }}
+        variant="outline-light"
+        size="sm"
+        onClick={() => handleLogout()}
+      >
+        logout
+      </Button>
     </div>
   );
 };

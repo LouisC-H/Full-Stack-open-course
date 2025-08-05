@@ -34,7 +34,8 @@ const App = () => {
 
   if (!userSelector) {
     return (
-      <div>
+      <div className="container-lg" data-bs-theme="dark">
+        <br />
         <h2>Log in to application</h2>
         <Notification />
         <LoginForm />
@@ -51,9 +52,12 @@ const App = () => {
     : null;
 
   return (
-    <div>
+    <div className="container-lg">
       <NavigationMenu />
-      <h2>Blogs</h2>
+      <h2>
+        {" "}
+        <b> Blogs </b>
+      </h2>
       <Notification />
       <Routes>
         <Route path="/" element={<MainPage />} />

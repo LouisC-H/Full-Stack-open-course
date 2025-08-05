@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 import userService from "../services/userService";
@@ -8,6 +9,7 @@ import Comments from "./Comments";
 
 const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch();
+  let navigate = useNavigate();
   const userSelector = useSelector((state) => state.user);
 
   const addLike = () => {
@@ -15,9 +17,10 @@ const BlogDetails = ({ blog }) => {
     dispatch(likeBlog(blog));
   };
 
-  const deleteBlog = () => {
+  const deleteClicked = () => {
     event.preventDefault();
     dispatch(deleteBlog(blog));
+    navigate("/");
   };
 
   const sameUser =
@@ -41,7 +44,7 @@ const BlogDetails = ({ blog }) => {
       </div>
       <div className="username">Added by {blog.user.name}</div>
       <Conditional boolean={sameUser}>
-        <button onClick={deleteBlog}>remove</button>
+        <button onClick={deleteClicked}>remove</button>
       </Conditional>
       <Comments commentsList={blog.comments} blogID={blog.id} />
     </div>

@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { useSelector } from "react-redux";
+import { Table } from "react-bootstrap";
 
 import Togglable from "../components/Togglable";
 import NewBlogForm from "../components/NewBlogForm";
@@ -16,9 +17,14 @@ const MainPage = () => {
         <h3>Create new blog</h3>
         <NewBlogForm user={userSelector.user} />
       </Togglable>
-      {blogsSelector.map((blog) => (
-        <Blog key={blog.id} blog={blog} user={userSelector.user} />
-      ))}
+      <br />
+      <Table striped>
+        <tbody>
+          {blogsSelector.map((blog) => (
+            <Blog key={blog.id} blog={blog} user={userSelector.user} />
+          ))}
+        </tbody>
+      </Table>
     </div>
   );
 };
